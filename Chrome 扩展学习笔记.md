@@ -1,12 +1,16 @@
 # Chrome 扩展学习笔记
 
+本文是一篇《Chrome 扩展及应用开发》的读书笔记，这本书是一本 Sneezry 大大写的免费书籍，下载以及在线观看可以在图灵社区找到，地址是 http://www.ituring.com.cn/book/1421。在此感谢 Sneezry 大大的分享！
+
+本文是一篇自己记录内容的读书笔记，如有谬误请大神斧正，[issus地址](https://github.com/gongpeione/geblog/issues)。
+
 ## manifest.json 入口文件
 
 所有的 Chrome 扩展都包含一个 JSON 格式的 manifest 文件 `manifest.json`,这个文件是整个扩展的入口，里面包括了所有 Chrome 所需的扩展的基本信息
 
 manifest 文档：[点这里](https://developer.chrome.com/extensions/manifest)
 
-example:
+示例代码:
 
 ```
 {
@@ -66,11 +70,11 @@ example:
 
 ## 基础内容
 
-### 不同的页面执行不同的脚本 content_scripts: [{},...]
+### 1、不同的页面执行不同的脚本 content_scripts: [{},...]
 
 文档地址：[点这里](https://developer.chrome.com/extensions/content_scripts)
 
-content_scripts 是一个包含一个或多个对象的数组，每个对象可以包含`matches`, `exclude_matches`, `css`, `js` 等属性，具体见上方文档地址，这些对象定义的是指定页面里注入或者不注入的文件，下面是一个简单的例子。
+content_scripts 是一个包含一个或多个对象的数组，每个对象可以包含`matches`, `exclude_matches`, `css`, `js` 等属性，具体见上方文档地址，这些对象定义的是在指定的页面里注入或者不注入文件，下面是一个简单的例子。
 
 ```
 "content_scripts": [
@@ -85,9 +89,10 @@ content_scripts 是一个包含一个或多个对象的数组，每个对象可�
 ]
 ```
 
-### 喜闻乐见的跨域 permissions: ['', ...]
+### 2、喜闻乐见的跨域 permissions: ['', ...]
 
 跨域文档地址：[点这里](https://developer.chrome.com/extensions/xhr#requesting-permission)
+
 permissions文档地址：[点这里](https://developer.chrome.com/extensions/xhr#requesting-permission)
 
 在普通页面中跨域是被浏览器大大禁止的，只能通过jsonp，服务器端设置cors等方法来实现跨域，具体方法写出来又是一篇文章，就不展开讲了。那么在 Chrome 扩展中如果也不允许跨域的话，那么扩展还有个球球用？？
@@ -107,11 +112,11 @@ fetch('https://geeku.net/').then(function (res) {
     console.log(res.text());
 });
 ```
-需要注意的是，`permissions` 里填写的域和你需要跨的域要对应起来，例如 `https://baidu.com/` 会重定向到 `https://www.baidu.com`，所以你需要把带www也填写上去，或者使用通配符 `https://*.baidu.com`
+需要注意的是，`permissions` 里填写的域和你需要跨的域要对应起来，例如 `https://baidu.com/` 会重定向到 `https://www.baidu.com`，所以你需要把www也填写上去，或者使用通配符 `https://*.baidu.com`
 
 `permissions` 除了获取跨域的权限之外还可以获得其他很多的权限，具体可以看看 [这里](https://developer.chrome.com/extensions/xhr#requesting-permission)。
 
-### 常驻后台 background: { scripts, page, persistent }
+### 3、常驻后台 background: { scripts, page, persistent }
 
 通过 `manifest.json` 中添加 `background` 属性就可以使得扩展常驻后台。
 
@@ -126,7 +131,7 @@ fetch('https://geeku.net/').then(function (res) {
 
 顺带一提，如果需要调试后台的话可以通过打开 `chrome://extensions/` 里扩展下的 `检查视图` ->  `背景页` 来完成。
 
-### 设置页面 options_page: 'options.html'
+### 4、设置页面 options_page: 'options.html'
 
 我们可以发现很多的 Chrome 扩展都会附带一个设置页面，那么如何来实现呢？
 
@@ -138,4 +143,4 @@ fetch('https://geeku.net/').then(function (res) {
 "options_page": "options.html"
 ```
 
-`localstorage` 的储存大小在 Chrome 里的限制为 5MB 以下，如果储存的数据大于 5MB 的话可以通过 `permissions` 中添加 `unlimitedStorage` 来储存更多的数据。
+`localstorage` 的储存大小在 Chrome 里的限制为 5MB 以下，如果储存的数据大于 5MB 的话可以通过 `permissions` 中添加 `unlimitedStorage` 来储存更多的数据。此外，Chrome 还提供了储存API以及数据库，储存API可以让用户将数据储存在本地磁盘以及和你的 Google 账户同步数据，这些内容将在后面讲到。
