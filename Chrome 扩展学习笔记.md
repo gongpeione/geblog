@@ -4,7 +4,7 @@
 
 本文是一篇自己记录内容的读书笔记，如有谬误请大神斧正，[issus地址](https://github.com/gongpeione/geblog/issues)。
 
-## manifest.json 入口文件
+## 入口文件 manifest.json: {}
 
 所有的 Chrome 扩展都包含一个 JSON 格式的 manifest 文件 `manifest.json`,这个文件是整个扩展的入口，里面包括了所有 Chrome 所需的扩展的基本信息
 
@@ -12,7 +12,7 @@ manifest 文档：[点这里](https://developer.chrome.com/extensions/manifest)
 
 示例代码:
 
-```
+```json
 {
 	 // 必须
     "manifest_version": 2,
@@ -76,7 +76,7 @@ manifest 文档：[点这里](https://developer.chrome.com/extensions/manifest)
 
 content_scripts 是一个包含一个或多个对象的数组，每个对象可以包含`matches`, `exclude_matches`, `css`, `js` 等属性，具体见上方文档地址，这些对象定义的是在指定的页面里注入或者不注入文件，下面是一个简单的例子。
 
-```
+```json
 "content_scripts": [
     {
         // 如果当前URL符合以下规则
@@ -101,13 +101,13 @@ permissions文档地址：[点这里](https://developer.chrome.com/extensions/xh
 
 例如我想获取 https://geeku.net/ 的内容，那么可以这么写
 
-```
+```json
 "permissions": [
     "https://geeku.net/*"
 ]
 ```
 那么在js中就可以随随便便获取到这里面的内容了~
-```
+```javascript
 fetch('https://geeku.net/').then(function (res) {
     console.log(res.text());
 });
@@ -122,7 +122,7 @@ fetch('https://geeku.net/').then(function (res) {
 
  `background` 属性包括三种属性，`scripts`，`page` 和 `persistent`，很明显 `scripts` 就是扩展常驻在后台的脚本。`page` 则是后台页面，一般来说page是不需要的。`persistent` 则是定义了常驻后台的方式，默认为 `true`，是指扩展一直在后台运行。值为 `false` 时则是按需执行。推荐将 `persistent` 的值设置为 `false` 以减小资源的消耗。下面是示例代码：
 
-```
+```json
 "background": {
     "scripts": ["background.js"],
     "persistent": false
@@ -139,7 +139,7 @@ fetch('https://geeku.net/').then(function (res) {
 
 下面是示例代码：
 
-```
+```json
 "options_page": "options.html"
 ```
 
