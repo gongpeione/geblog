@@ -144,3 +144,51 @@ fetch('https://geeku.net/').then(function (res) {
 ```
 
 `localstorage` 的储存大小在 Chrome 里的限制为 5MB 以下，如果储存的数据大于 5MB 的话可以通过 `permissions` 中添加 `unlimitedStorage` 来储存更多的数据。此外，Chrome 还提供了储存API以及数据库，储存API可以让用户将数据储存在本地磁盘以及和你的 Google 账户同步数据，这些内容将在后面讲到。
+
+### 5、页面通信 chrome.runtime.sendMessage...
+
+Chrome 扩展很常见的一个功能就是，扩展的多个页面之间互相传递数据以获取彼此的状态，从而采取不同的操作。这个功能也是很容易实现的，所用到的就是 Chrome 所提供的通信接口。
+
+Chrome 给我们提供了4个相关的通信接口，分别是 `chrome.runtime.sendMessage`, `chrome.runtime.onMessage`, `chrome.runtime.connect` 以及 `chrome.runtime.onConnect`。这四个接口的详细文档可以在 [这里](https://developer.chrome.com/extensions/runtime) 看到。下面就主要说明一下这几个接口的作用。
+
+#### sendMessage & onMessage
+
+文档地址：[sendMessage](https://developer.chrome.com/extensions/runtime#method-sendMessage)，[onMessage](https://developer.chrome.com/extensions/runtime#event-onMessage) 
+
+`sendMessage` 和 `onMessage` 是一组对应的接口。顾名思义，一个是发送消息而另一个是接收消息。
+
+`sendMessage` 的完整调用的方法是 `chrome.runtime.sendMessage(string extensionId, any message, object options, function responseCallback)`，`extensionId` 是一个可选的参数，是你想要发送消息到的扩展ID，如果为空则默认为发送到当前的扩展【可以通过 `chrome.runtime.id` 获取你的扩展ID】。`message` 就是你想要发送的消息内容啦，内容随意你开心就好。`options` 也是一个可选的参数【Chrome 32 之后】，其中只包含一个有用的属性 `includeTlsChannelId`，这个属性决定了 TLS 通道ID 是否会通过 `onMessageExternal` 传递过来，一般不用管它放置一遍就好。最后一个参数是 `responseCallback`，依然是一个可选项，这是一个用于接受消息接收方返回的信息的回调函数。回调函数只有一个参数 `response`，内容就是接收方发送过来的消息。
+
+`onMessage` 是一个事件，当扩展或是 `content_script` 发送消息过来时即可触发。你可以通过 `chrome.runtime.onMessage.addListener(function callback)` 来定义触发事件时的回调函数。`callback` 形似 `function(any message, MessageSender sender, function sendResponse) {...};` 这样一个函数，`message` 即为发送过来的消息内容，`sender` 则是一个包括发送方信息的对象，`sendResponse` 则是接收到消息之后的回调函数。
+
+下面是一组接收和发送消息的示例代码
+
+```javascript
+// sendMessage
+let counter = 0;
+setInterval((response) => {
+    chrome.runtime.sendMessage(`Current num:${counter}`, response => {
+        console.log('[Response] ' + res);
+    });
+    counter++;
+}, 1000);
+
+// onMessage
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    console.log(msg, sender);
+    sendResponse('Get!');
+});
+```
+
+控制台输出的内容分别为
+
+```
+// sendMessage
+Response: Get! message.js:10 
+Response: Get! message.js:10 
+...
+
+// onMessage
+Current num:0 Object {id: "...", url: "...", tab: Object, frameId: 0}
+Current num:1 Object {id: "...", url: "...", tab: Object, frameId: 0}
+```
