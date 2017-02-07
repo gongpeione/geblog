@@ -12,7 +12,7 @@ manifest 文档：[点这里](https://developer.chrome.com/extensions/manifest)
 
 示例代码:
 
-```json
+```javascript
 {
 	 // 必须
     "manifest_version": 2,
@@ -76,7 +76,7 @@ manifest 文档：[点这里](https://developer.chrome.com/extensions/manifest)
 
 content_scripts 是一个包含一个或多个对象的数组，每个对象可以包含`matches`, `exclude_matches`, `css`, `js` 等属性，具体见上方文档地址，这些对象定义的是在指定的页面里注入或者不注入文件，下面是一个简单的例子。
 
-```json
+```javascript
 "content_scripts": [
     {
         // 如果当前URL符合以下规则
@@ -101,7 +101,7 @@ permissions文档地址：[点这里](https://developer.chrome.com/extensions/xh
 
 例如我想获取 https://geeku.net/ 的内容，那么可以这么写
 
-```json
+```javascript
 "permissions": [
     "https://geeku.net/*"
 ]
@@ -122,7 +122,7 @@ fetch('https://geeku.net/').then(function (res) {
 
  `background` 属性包括三种属性，`scripts`，`page` 和 `persistent`，很明显 `scripts` 就是扩展常驻在后台的脚本。`page` 则是后台页面，一般来说page是不需要的。`persistent` 则是定义了常驻后台的方式，默认为 `true`，是指扩展一直在后台运行。值为 `false` 时则是按需执行。推荐将 `persistent` 的值设置为 `false` 以减小资源的消耗。下面是示例代码：
 
-```json
+```javascript
 "background": {
     "scripts": ["background.js"],
     "persistent": false
@@ -139,7 +139,7 @@ fetch('https://geeku.net/').then(function (res) {
 
 下面是示例代码：
 
-```json
+```javascript
 "options_page": "options.html"
 ```
 
@@ -157,7 +157,7 @@ Chrome 给我们提供了4个相关的通信接口，分别是 `chrome.runtime.s
 
 `sendMessage` 和 `onMessage` 是一组对应的接口。顾名思义，一个是发送消息而另一个是接收消息。
 
-`sendMessage` 的完整调用的方法是 `chrome.runtime.sendMessage(string extensionId, any message, object options, function responseCallback)`，`extensionId` 是一个可选的参数，是你想要发送消息到的扩展ID，如果为空则默认为发送到当前的扩展【可以通过 `chrome.runtime.id` 获取你的扩展ID】。`message` 就是你想要发送的消息内容啦，内容随意你开心就好。`options` 也是一个可选的参数【Chrome 32 之后】，其中只包含一个有用的属性 `includeTlsChannelId`，这个属性决定了 TLS 通道ID 是否会通过 `onMessageExternal` 传递过来，一般不用管它放置一遍就好。最后一个参数是 `responseCallback`，依然是一个可选项，这是一个用于接受消息接收方返回的信息的回调函数。回调函数只有一个参数 `response`，内容就是接收方发送过来的消息。
+`sendMessage` 的完整调用的方法是 `chrome.runtime.sendMessage(string extensionId, any message, object options, function responseCallback)`，`extensionId` 是一个可选的参数，是你想要发送消息到的扩展ID，如果为空则默认为发送到当前的扩展【可以通过 `chrome.runtime.id` 获取你的扩展ID】。`message` 就是你想要发送的消息内容啦，内容随意你开心就好。`options` 也是一个可选的参数【Chrome 32 之后】，其中只包含一个有用的属性 `includeTlsChannelId`，这个属性决定了 TLS 通道ID 是否会通过 `onMessageExternal` 传递过来，一般不用管它放置一边就好。最后一个参数是 `responseCallback`，依然是一个可选项，这是一个用于接受消息接收方返回的信息的回调函数。回调函数只有一个参数 `response`，内容就是接收方发送过来的消息。
 
 `onMessage` 是一个事件，当扩展或是 `content_script` 发送消息过来时即可触发。你可以通过 `chrome.runtime.onMessage.addListener(function callback)` 来定义触发事件时的回调函数。`callback` 形似 `function(any message, MessageSender sender, function sendResponse) {...};` 这样一个函数，`message` 即为发送过来的消息内容，`sender` 则是一个包括发送方信息的对象，`sendResponse` 则是接收到消息之后的回调函数。
 
@@ -191,4 +191,92 @@ Response: Get! message.js:10
 // onMessage
 Current num:0 Object {id: "...", url: "...", tab: Object, frameId: 0}
 Current num:1 Object {id: "...", url: "...", tab: Object, frameId: 0}
+...
 ```
+
+#### connect & onConnect
+
+文档地址：[connect](https://developer.chrome.com/extensions/runtime#method-connect)，[onConnect](https://developer.chrome.com/extensions/runtime#event-onConnect) 
+
+`connect` 主要是用于 `content_scripts` 和扩展的长连接，通常适用于长时间的对话。建立连接之后双方都会获得一个用于之后发送和接收消息的port对象，下面是来自[crxdoc-zh](https://crxdoc-zh.appspot.com/apps/messaging)的示例代码（不要问我为什么不是我自己的代码，犯懒了没有实践这段代码）。
+
+```javascript
+var port = chrome.runtime.connect({name: "敲门"});
+port.postMessage({joke: "敲门"});
+port.onMessage.addListener(function(msg) {
+  if (msg.question == "是谁？")
+    port.postMessage({answer: "女士"});
+  else if (msg.question == "哪位女士？")
+    port.postMessage({answer: "Bovary 女士"});
+});
+
+chrome.runtime.onConnect.addListener(function(port) {
+  console.assert(port.name == "敲门");
+  port.onMessage.addListener(function(msg) {
+    if (msg.joke == "敲门")
+      port.postMessage({question: "是谁？"});
+    else if (msg.answer == "女士")
+      port.postMessage({question: "哪位女士？"});
+    else if (msg.answer == "Bovary 女士")
+      port.postMessage({question: "我没听清楚。"});
+  });
+});
+```
+
+### 6、数据的储存 localStorage & storage & Web SQLDatabase
+
+Chrome 扩展通常使用 localStorage & storage & Web SQLDatabase 这三种方法来储存数据，其中 `localStorage` 前面已经介绍过了，而 Web SQLDatabase 已经不推荐使用了，这一节就主要介绍 Chrome 的储存 API `chrome.storage`。
+
+`chrome.storage` 和 `localStorage` 功能基本相同，两者主要的不同之处在于 `chrome.storage` 可以通过谷歌账号同步数据。`content_scripts` 可以不通过扩展的后台页面直接获取数据，在隐身模式下用户的扩展设置也可以保留下来，以及`chrome.storage` 是异步读写，可以进行大量的读写操作，比 `localStorage` 更快。
+
+文档地址：[chrome.storage](https://developer.chrome.com/extensions/storage)
+
+在使用 `chrome.storage` 之前你需要在 `manifest.json` 里声明 `storage` 权限。
+
+`chrome.storage` 包括 `chrome.storage.sync` 和 `chrome.storage.local`，local 只会保存在本地，而 sync 则会同步到所登陆的账号。如果当前 Chrome 处于离线状态则会先保存在本地，在线之后再同步。下面就用 `chrome.storage.sync` 来举例子。
+
+我们可以通过这样来添加或修改数据：
+```javascript
+chrome.storage.sync.set({'city': 'Nanchang'}, function() {
+      alert('Set successful!');
+});
+```
+
+我们可以通过这样来获取数据：
+```javascript
+chrome.storage.sync.set('city', function() {
+      alert('Set successful!');
+});
+```
+其中 `'city'` 可以是对象或是数组，下同
+
+我们可以通过这样来删除数据：
+```javascript
+chrome.storage.sync.remove('city', function() {
+      alert('Remove successful!');
+});
+```
+
+我们可以通过这样来删除数据：
+```javascript
+chrome.storage.sync.remove('city', function() {
+      alert('Remove successful!');
+});
+```
+
+当数据发生变化时我们可以通过这样来获取变化的值：
+```javascript
+chrome.storage.onChanged.addListener((changes, namespace) => {
+    console.log(changes); 
+    // { 'city': { 'newValue': '', 'oldValue': '' } }
+});
+```
+
+我们还可以这样获取当前正在使用的空间大小：
+```javascript
+chrome.storage.sync.getBytesInUse(b => {
+    console.log('Bytes in use ' + b + 'byte');
+    // Bytes in use 19byte
+});
+```
+
