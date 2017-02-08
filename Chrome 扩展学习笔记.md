@@ -2,7 +2,7 @@
 
 本文是一篇《Chrome 扩展及应用开发》的读书笔记，这本书是一本 Sneezry 大大写的免费书籍，下载以及在线观看可以在图灵社区找到，地址是 http://www.ituring.com.cn/book/1421。在此感谢 Sneezry 大大的分享！
 
-本文是一篇自己记录内容的读书笔记，如有谬误请大神斧正，[issus地址](https://github.com/gongpeione/geblog/issues)。
+本文是一篇自己记录内容的学习笔记，如有谬误请大神斧正，[issus地址](https://github.com/gongpeione/geblog/issues)。
 
 ## 入口文件 manifest.json: {}
 
@@ -243,6 +243,7 @@ chrome.storage.sync.set({'city': 'Nanchang'}, function() {
 ```
 
 我们可以通过这样来获取数据：
+
 ```javascript
 chrome.storage.sync.set('city', function() {
       alert('Set successful!');
@@ -251,6 +252,7 @@ chrome.storage.sync.set('city', function() {
 其中 `'city'` 可以是对象或是数组，下同
 
 我们可以通过这样来删除数据：
+
 ```javascript
 chrome.storage.sync.remove('city', function() {
       alert('Remove successful!');
@@ -258,6 +260,7 @@ chrome.storage.sync.remove('city', function() {
 ```
 
 我们可以通过这样来删除数据：
+
 ```javascript
 chrome.storage.sync.remove('city', function() {
       alert('Remove successful!');
@@ -265,6 +268,7 @@ chrome.storage.sync.remove('city', function() {
 ```
 
 当数据发生变化时我们可以通过这样来获取变化的值：
+
 ```javascript
 chrome.storage.onChanged.addListener((changes, namespace) => {
     console.log(changes); 
@@ -273,6 +277,7 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
 ```
 
 我们还可以这样获取当前正在使用的空间大小：
+
 ```javascript
 chrome.storage.sync.getBytesInUse(b => {
     console.log('Bytes in use ' + b + 'byte');
@@ -280,3 +285,89 @@ chrome.storage.sync.getBytesInUse(b => {
 });
 ```
 
+### 7、Browser Actions
+
+`manifest.js` 中的 `"browser_action"` 属性用于将指定的ICON添加到 Chrome 的地址栏右侧的工具栏中。如果还指定了 `"default_popup"` 则在单击扩展图标时会在图标下侧加载此页面。图标上面还可以添加一个“徽章（badge）”，用于显示额外的信息，例如新消息数量等。下面对 `"browser_action"` 属性进行详细的介绍。
+
+文档地址：[browser_actions](https://developer.chrome.com/extensions/browserAction)
+
+ `"browser_action"` 主要包括以下几个属性：
+ 
+ - `"default_icon"` 
+ - `"default_title"`
+ - `"default_popup"`
+
+1、`"default_icon"` 的格式如下。
+
+```
+{                  
+    "16": "images/icon16.png",           // 可选
+    "24": "images/icon24.png",           // 可选
+    "32": "images/icon32.png"            // 可选
+},
+```
+默认大小为 16 x 16，单位为 dips(device-independent pixels)，大图标会被自动压缩，但是还是尽量提供 16 x 16 dips 大小的图片以达到最佳的效果。Chrome 会根据屏幕的像素密度选择最合适图片。
+
+ICON 的值既可以是静态图片也可以是 canvas 生成的动态图片。
+
+ICON 的值还可以通过setIcon设置，具体方法如下示例代码所示：
+
+```javascript
+// chrome.browserAction.setIcon(object details, function callback)
+chrome.browserAction.setIcon({
+	'path': 'pathToImage', // 可选
+	'imageData': 'imageData', // 可选
+	'tabId': 'tabId' // 可选
+}, () => {
+	console.log('修改成功');
+});
+```
+
+
+`"default_title"`
+
+这个就是图片的提示信息了，鼠标悬浮在图标上时就会显示出来。就不多说了。
+
+title 的值同样可以通过代码设置或是获取当前值，具体方法如下示例代码所示：
+
+```javascript
+// 设置新 title， chrome.browserAction.setTitle(object details)
+chrome.browserAction.setTitle({
+	'title': 'New Title',
+	'tabId': tab ID // 可选
+});
+
+// 获取新 title， chrome.browserAction.setTitle(object details)
+chrome.browserAction.getTitle({
+	'tabId': tab ID // 可选
+}, result => {
+	console.log('新Title为：' + result);
+});
+```
+
+徽章（badge）只能通过代码设置，只能包括最多 4 个字符（文档说是只能有四个字符，经过测试 Chrome 56 最多可以设置五个英文字符，超过五个则会显示前面三个，后面则显示为省略号，中文只显示两个字，超过则显示第一个字和省略号）：
+
+```
+// 设置 Badge 文字：chrome.browserAction.setBadgeText(object details)
+chrome.browserAction.setBadgeText({
+    "text": '测试'
+});
+
+// 设置 Badge 背景颜色：chrome.browserAction.setBadgeBackgroundColor(object details)
+chrome.browserAction.setBadgeBackgroundColor({
+    'color': [255, 0, 0, 255] // 或者 "#000"
+})
+
+```
+
+需要注意的是，现在 Badge 的字体颜色是不能更改的，所以请不要用太浅的背景色。以及 Chrome 56 以及 58.0.3006.0 canary 下设置半透明的背景色似乎都是无效的。
+
+`"default_popup"` 指定用户点击扩展图标之后展示在图标下方弹出框的页面。需要注意的是这个页面并不是一直在后台运行的，每次用户点击图标时都是重新打开这个页面。
+
+
+除了上述所说的内容，文档里还给出了一些视觉效果方面的小提示：
+
+1. 确保 browser actions 在大部分的页面都是有用的，如果只是对部分页面生效请使用 page actions
+2. 请使用尽量大的，颜色比较突出的图标
+3. 给你的图标添加半透明的描边效果。因为很多用户都会使用主题，你的图标应该在各种背景色下都可用。
+4. 不要一直给你的图标加动画效果，很容易惹人不悦。
