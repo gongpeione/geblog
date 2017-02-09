@@ -2,6 +2,9 @@
     <div class="cover">
         <div class="loading" v-if="loading">Loading...</div>
         <div class="article" v-html="content"></div>
+        <div class="comment" v-show="!loading">
+            <div id="disqus_thread"></div> 
+        </div>                 
     </div>
 </template>
 
@@ -27,6 +30,24 @@ export default {
         });
     },
 
+    mounted () {
+        // console.log(this.$route, window.location.href);
+        const url = window.location.href.replace('#/', '');
+        if (window.DISQUS) {
+            this.reset(url);
+            // return
+        } else {
+            window.disqus_config = function () {
+                this.page.url = url;
+                this.page.identifier = url;
+            };
+            const d = document, s = d.createElement('script');
+            s.src = '//blog-geeku-github.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    },
+
     methods: {
         getArticle (title) {
             const url = `${config.url.articles}/${title}.md`;
@@ -43,7 +64,19 @@ export default {
                 this.content = data;
                 this.loading = false;
             });
-        }
+        },
+        reset (url) {
+            const self = this;
+            const dsq = window.DISQUS;
+            dsq.reset({
+                reload: true,
+                config: function () {
+                    // this.page.identifier = (self.$route.path || window.location.pathname)
+                    this.page.url = url;
+                    this.page.identifier = url;
+                }
+            })
+      },
     }
 }
 </script>
@@ -55,7 +88,14 @@ export default {
         // border: 2px dashed #aaa;
         padding: .2rem;
         margin: .2rem 0;
-        background: #f0f7f1;
+        background: #f0f5f7;
+        overflow-x: auto;
+        border-radius: 3px
+    }
+    code {
+        background: #f0f5f7;
+        padding: .02rem .08rem;
+        border-radius: 3px
     }
     .article article {
         text-align: left;
@@ -69,14 +109,14 @@ export default {
         display: none;
     }
     .article a {
-        color: #25b35b;
+        color: #1d71c0;
         text-decoration: underline;
     }
     .article article h2,
     .article article h3 {
         margin: .4rem 0 .2rem -.4rem;
         padding-left: .4rem;
-        border-left: 3px solid #54d86f;
+        border-left: 3px solid #1d71c0;
     }
     .article article h3 {
         margin-left: 0;
@@ -95,7 +135,17 @@ export default {
     }
     ul li::before {
         content: '•';
-        color: #54d86f;
+        color: #1d71c0;
         margin-right: .1rem;
+    }
+
+    .comment {
+        width: 70%;
+        margin: 0 auto;
+        background: #fff;
+        padding: .2rem .3rem;
+        border-radius: 3px;
+        box-shadow: 1px 1px rgb(199, 206, 200),2px 2px rgb(199, 206, 200),3px 3px rgb(199, 206, 200);
+
     }
 </style>

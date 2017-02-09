@@ -1,6 +1,6 @@
 # Chrome 扩展学习笔记
 
-本文是一篇《Chrome 扩展及应用开发》的读书笔记，这本书是一本 Sneezry 大大写的免费书籍，下载以及在线观看可以在图灵社区找到，地址是 http://www.ituring.com.cn/book/1421。在此感谢 Sneezry 大大的分享！
+本文是一篇《Chrome 扩展及应用开发》的读书笔记，这本书是一本 Sneezry 大大写的免费书籍，下载以及在线观看可以在图灵社区找到，地址是 [Chrome 扩展及应用开发](http://www.ituring.com.cn/book/1421)。在此感谢 Sneezry 大大的分享！
 
 本文是一篇自己记录内容的学习笔记，如有谬误请大神斧正，[issus地址](https://github.com/gongpeione/geblog/issues)。
 

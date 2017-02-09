@@ -42,26 +42,42 @@ body {
     background: #eee;
     font-size: .16rem;
     line-height: 2;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    font-weight: 300;
+}
+a,
+a:hover {
+    text-decoration: none;
 }
 
 h1 {
     font-size: .3rem;
+    font-weight: 300;
 }
 h2 {
     font-size: .28rem;
+    font-weight: 300;
 }
 h3 {
     font-size: .25rem;
+    font-weight: 300;
 }
 h4 {
     font-size: .2rem;
+    font-weight: 300;
 }
 p {
     line-height: 1.5;
+    font-weight: 300;
 }
 #app {
-    background: #eee;
+    // background: #252f33;
+    /* Rectangle: */
+    background-image: linear-gradient(-180deg, #304958 0%, #433245 99%);
+    // background-attachment: fixed;
     min-height: 100%;
+    overflow: auto;
+    padding: .5rem 0;
 }
 .logo {
     text-align: center;
@@ -75,13 +91,32 @@ p {
     color: #333;
     text-decoration: none;
 }
+.logo a::after {
+    content: "\A";
+    white-space: pre; 
+}
+.logo a:hover {
+    text-decoration: none;
+}
 .logo h1 {
     margin: .1rem 0;
+    font-weight: 600;
+    color: #59ceff;
+    text-shadow: 1px 1px #1d71c0, 2px 2px #1d71c0, 3px 3px #1d71c0;
+    font-size: .6rem;
+    display: inline-block;
+}
+.logo h1:hover {
+    text-shadow: 1px 1px #1d71c0, 2px 2px #1d71c0;
+}
+.logo h1::first-letter {
+    // color: #cad;
 }
 
 .loading {
     text-align: center;
     font-size: .3rem;
-    color: #aaa;
+    color: rgba(255,255,255,.2);
+    font-weight: 600;
 }
 </style>
