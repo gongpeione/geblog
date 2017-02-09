@@ -24,6 +24,7 @@ export default {
         fetch(config.url.articles).then(res => {
             return res.json()
         }).then(data => {
+            data = data.reverse();
             data.forEach(article => {
                 this.articles.push({
                     title: article.name.replace('.md', '')
