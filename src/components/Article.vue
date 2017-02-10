@@ -1,7 +1,10 @@
 <template>
     <div class="cover">
-        <div class="loading" v-if="loading">Loading...</div>
-        <div class="article" v-html="content"></div>
+        <div class="content">
+            <h1>{{ title }}</h1>
+            <div class="loading" v-if="loading">Loading...</div>
+            <div class="article" v-html="content"></div>
+        </div>
         <div class="comment" v-show="!loading">
             <div id="disqus_thread"></div> 
         </div>                 
@@ -97,13 +100,38 @@ export default {
         padding: .02rem .08rem;
         border-radius: 3px
     }
+    .content > h1 {
+        display: block;
+        background: #fff;
+        width: 70%;
+        text-align: center;
+        min-height: 100%;
+        margin: 0 auto;
+        margin-bottom: .2rem;
+        padding: .2rem .4rem;
+        // box-shadow: 1px 1px 2px rgba(0,0,0,.1), 0 1px 1px rgba(0,0,0,.1);
+        box-shadow: 1px 1px rgb(199, 206, 200),
+                    2px 2px rgb(199, 206, 200),
+                    3px 3px rgb(199, 206, 200),
+                    -2px -2px 10px rgba(0,0,0,.2),
+                    2px 2px 10px rgba(0,0,0,.2);
+        border-radius: 3px;
+        max-width: 1200px;
+        outline: 2px dashed #ddd;
+        outline-offset: -.1rem;
+        transition: all .2s ease-in-out;
+        font-weight: 800;
+        font-size: .26rem;
+    }
     .article article {
         text-align: left;
+        outline: none;
     }
-    .article h1 {
-        text-align: center;
-        margin-bottom: .2rem;
-        padding: .2rem;
+    .article article > h1 {
+        display: none;
+        // text-align: center;
+        // margin-bottom: .2rem;
+        // padding: .2rem;
     }
     .article a.anchor {
         display: none;
@@ -130,13 +158,16 @@ export default {
         margin: .2rem;
     }
     ul {
-        margin: .2rem;
+        margin: .2rem 0;
         list-style: none;
     }
     ul li::before {
         content: '•';
         color: #1d71c0;
         margin-right: .1rem;
+    }
+    ul li.task-list-item::before {
+        content: '';
     }
 
     .comment {

@@ -54,6 +54,12 @@ export default {
         border-radius: 3px;
         max-width: 1200px;
         font-size: .16rem;
+        outline: 2px dashed #ddd;
+        outline-offset: -.1rem;
+        transition: all .2s ease-in-out
+    }
+    article:hover {
+        outline-color: #aaa;
     }
     article a {
         text-decoration: none;
@@ -65,14 +71,15 @@ export default {
         text-decoration: none;   
     }
     .articles article a {
-        transition: .2s all ease-in-out;
+        // transition: .2s all ease-in-out;
     }
      .articles article a:hover {
-        color: #1d71c0;
-     }
+        // color: #1d71c0;
+    }
 
     .articles article h2 {
         margin: 0;
+        font-weight: 800;
     }
 
 </style>

@@ -16,12 +16,23 @@
         <div class="wrap">
             <router-view></router-view>
         </div>
+
+        <div class="totop" @click.native="totop"></div>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'app'
+    name: 'app',
+    data () {
+        return {}
+    },
+    methods: {
+        totop () {
+            console.log('aaa');
+            window.scrollTo(0, 0);
+        }
+    }
 }
 </script>
 
@@ -44,6 +55,7 @@ body {
     line-height: 2;
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     font-weight: 300;
+    color: #3b546b;
 }
 a,
 a:hover {
@@ -55,15 +67,15 @@ h1 {
     font-weight: 300;
 }
 h2 {
-    font-size: .28rem;
+    font-size: .26rem;
     font-weight: 300;
 }
 h3 {
-    font-size: .25rem;
+    font-size: .22rem;
     font-weight: 300;
 }
 h4 {
-    font-size: .2rem;
+    font-size: .18rem;
     font-weight: 300;
 }
 p {
@@ -73,7 +85,7 @@ p {
 #app {
     // background: #252f33;
     /* Rectangle: */
-    background-image: linear-gradient(-180deg, #304958 0%, #433245 99%);
+    background-image: linear-gradient(-180deg, #202b31 0%, #433245 99%);
     // background-attachment: fixed;
     min-height: 100%;
     overflow: auto;
@@ -82,6 +94,7 @@ p {
 .logo {
     text-align: center;
     padding: .2rem;
+    margin-bottom: .2rem;
 }
 .logo img {
     width: 1.6rem;
@@ -118,5 +131,47 @@ p {
     font-size: .3rem;
     color: rgba(255,255,255,.2);
     font-weight: 600;
+}
+
+.totop {
+    display: inline-block;
+    position: fixed;
+    right: .2rem;
+    bottom: .2rem;
+    width: .4rem;
+    height: .4rem;
+    background: #fff;
+    box-shadow: 1px 1px rgb(199, 206, 200),
+                2px 2px rgb(199, 206, 200),
+                3px 3px rgb(199, 206, 200),
+                -2px -2px 10px rgba(0,0,0,.2),
+                2px 2px 10px rgba(0,0,0,.2);
+    border-radius: 3px;
+}
+.totop::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    width: .2rem;
+    height: .05rem;
+    background: #ccc;
+    transform: rotate(-45deg) translate(-75%, -50%);
+    transform-origin: left;
+}
+.totop::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    width: .2rem;
+    height: .05rem;
+    background: #ccc;
+    transform: rotate(45deg) translate(-25%, -50%);
+    transform-origin: left;
+}
+.totop:hover::before,
+.totop:hover::after {
+    background: #59ceff;
 }
 </style>
