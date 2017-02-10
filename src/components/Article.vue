@@ -154,6 +154,14 @@ export default {
     .article article h4 {
         margin: .2rem 0;
     }
+    blockquote {
+        border-left: 5px solid #f0f5f7;
+        padding: 0 .3rem;
+        color: #666;
+        margin: .4rem 0;
+        font-size: .14rem;
+        overflow: hidden;
+    }
     ol {
         margin: .2rem;
     }

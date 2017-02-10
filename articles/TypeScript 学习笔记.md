@@ -80,9 +80,11 @@ iAmNumOrString = 'String';
 
 ### 接口 Interfaces
 
-这个就是在 JavaScript 中完全没有的概念了。如果学习了 Java 的对这个应该就不陌生了。
+这个就是在 JavaScript 中完全没有的概念了。如果学习了 Java 的对这个应该不陌生。下面就介绍一下 TypeScript 的接口。
 
 学习接口之前需要知道的一个名词是：鸭子类型（dock typing）。这个名词的来源是一句谚语：当看到一只鸟走起来像鸭子、游泳起来像鸭子、叫起来也像鸭子，那么这只鸟就可以被称为鸭子。例如 JavaScript 里的数组和函数的 `arguments`，`arguments` 和数组一样有它的 `length`，也可以通过下标来获取值，`arguments` 就是一个类数组。
+
+鸭子类型总结起来就是，不关注本身是什么，只关注某些方面是否相同。这就是 TypeScript 里接口的作用。
 
 >这里稍微扩展一下。`arguments` 其实是一个形如 `{ 0: 1, 1: 2, length: 2 }` 的一个对象，那么为什么 `arguments` 可以通过类似 `[].push.call(arguments, 0)` 这样的方式使用真·数组的方法呢。翻看 Google 的 V8 引擎处理数组的源代码就可以大概了解到了，关于数组的源码地址在这里：[array.js](https://github.com/v8/v8/blob/master/src/js/array.js)。
 
@@ -115,13 +117,13 @@ function ArrayPush() {
   return new_length;
 }
 ```
-从源码可以看出
+> 从源码可以看出其实数组的 `push` 方法完全没有涉及到判断它是不是一个真的数组，只和 `length` 有关。这就是鸭子类型很典型的体现。
 
 > 参考：[深入理解JAVASCRIPT类数组](http://hao.jser.com/archive/10357/)
 
 TypeScript 的接口使用方法如下。
 
-首先是个简单的例子：
+#### 首先是个简单的例子：
 
 ```typescript
 function printLabel(labelledObj: { label: string }) {
@@ -132,6 +134,8 @@ let myObj = {size: 10, label: "Size 10 Object"};
 printLabel(myObj);
 ```
 `printLabel` 是一个函数，他有一个参数 `labelledObj`，传递过来的 `labelledObj` 必须是一个包括 `label` 属性的对象。注意到我们传的 `myObj` 对象除了 `label` 之外还有别的属性，但是编译器只会检查传递过来的参数里至少有我们所规定的 ` label` 属性就好。
+
+在 TypeScript 里，只要传递给函数的对象和接口 **形似** 就可以了，并且和对象里属性的顺序也没有关系。
 
 其实上面的那个例子就等价于：
 
@@ -148,8 +152,46 @@ let myObj = {size: 10, label: "Size 10 Object"};
 printLabel(myObj);
 ```
 
-现在，`LabelledValue` 就是我们所定义的那个接口的名字了。在 TypeScript 里，只要传递给函数的对象和接口 **形似** 就可以了，并且。
+现在，`LabelledValue` 就是我们所定义的那个接口的名字了。
 
+#### 可选属性 Optional Properties
+
+如果接口中的某些属性是可有可无的，那么就可以定义时在属性后面加上一个问号 `?`，代表它是一个可选属性，下面是一个简单的例子：
+
+```typescript
+interface SquareConfig {
+    color?: string;
+    width?: number;
+}
+
+function createSquare(config: SquareConfig): {color: string; area: number} {
+    let newSquare = {color: "white", area: 100};
+    if (config.color) {
+        newSquare.color = config.color;
+    }
+    if (config.width) {
+        newSquare.area = config.width * config.width;
+    }
+    return newSquare;
+}
+
+let mySquare = createSquare({color: "black"});
+```
+
+#### 只读属性 Readonly properties
+
+有一些属性可能不能去更改它，那么就可以在定义时在属性前面加上 `readonly`，那么在变量声明赋值之后就不能再更改属性的值了。这个和 ECMAScript 2015 里的 `const` 比较类似。那么什么时候用 `readonly` 什么时候用 `const` 呢？当然是变量使用 `const` 而属性使用 `readonly`。
+
+例子：
+
+```typescript
+interface Point {
+    readonly x: number;
+    readonly y: number;
+}
+let p1: Point = { x: 10, y: 20 };
+p1.x = 5; // 出错!
+```
 
 
 ## 进阶

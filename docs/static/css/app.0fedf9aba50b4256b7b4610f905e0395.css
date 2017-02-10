@@ -4582,6 +4582,14 @@ code {
 .article article h4 {
     margin: .2rem 0;
 }
+blockquote {
+    border-left: 5px solid #f0f5f7;
+    padding: 0 .3rem;
+    color: #666;
+    margin: .4rem 0;
+    font-size: .14rem;
+    overflow: hidden;
+}
 ol {
     margin: .2rem;
 }
@@ -4606,4 +4614,4 @@ ul li.task-list-item::before {
     box-shadow: 1px 1px rgb(199, 206, 200),2px 2px rgb(199, 206, 200),3px 3px rgb(199, 206, 200);
 }
 
-/*# sourceMappingURL=app.bad66b4616fec764c7a8de556477d8c6.css.map*/
+/*# sourceMappingURL=app.0fedf9aba50b4256b7b4610f905e0395.css.map*/
