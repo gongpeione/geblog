@@ -193,5 +193,59 @@ let p1: Point = { x: 10, y: 20 };
 p1.x = 5; // 出错!
 ```
 
+#### 任意属性
+
+有的时候我们需要接口中允许有任意名字的属性，TypeScript 中可以使用 `[propName: string]: any` 来定义一个任意属性，例如：
+
+```typescript
+interface Website {
+	title: string;
+	url: string;
+	[propName: string]: string;
+}
+const geeku: Website = {
+	title: 'Geeku',
+	url: 'https://geeku.net',
+	blog: 'http://blog.geeku.net'
+}
+```
+
+需要注意的是，如果你在接口中定义了 任意属性，那么接口中的其他的属性的类型都要是可选属性类型的子属性。
+
+
+### 数组的类型
+
+TypeScript 中也扩展了数组的定义方式，包括 *类型[]* , *泛型* 和 *接口* 三种方法。
+
+#### 类型[]
+
+我们可以使用类型后面加一个方括号的形式来定义数组：
+
+```typescript
+const myDomains: string[] = [ 'geeku.net', 'geeku.work', 'gcinori.com' ];
+```
+
+若数组中出现了其他类型的元素就会报错。同样的在这里我们也可以使用联合类型。
+
+#### 泛型 Generic
+
+除了 *类型[]* 我们还可以使用形如 `Array<type>` 来表示数组，这种表示方式叫做泛型，例如：
+
+```typescript
+const myDomains: Array<string> = [ 'geeku.net', 'geeku.work', 'gcinori.com' ];
+```
+
+关于泛型的内容将在后文详细介绍。
+
+#### 接口
+
+接口也是用来表示数组元素类型的一个很有用的方式，例子如下：
+
+```typescript
+interface StringArray {
+    [index: number]: string
+}
+const myDomains: StringArray = [ 'geeku.net', 'geeku.work', 'gcinori.com' ];
+```
 
 ## 进阶
