@@ -248,4 +248,95 @@ interface StringArray {
 const myDomains: StringArray = [ 'geeku.net', 'geeku.work', 'gcinori.com' ];
 ```
 
+### 函数
+
+函数包括参数和返回值，在 TypeScript 中要把这两者都考虑到。
+
+```typescript
+function sum (x: number, y: number): number {
+	return x + y;
+}
+```
+
+#### 可选参数
+
+括号内的即为参数的类型，括号后的即为函数的返回值的类型。需要注意的是，在 TypeScript 中，函数声明之后调用时所传入的参数不可多于也不可少于声明时所定义参数。如果需要有可选参数，我们可以使用和接口类似的问号 `?` 来定义可选参数，例如：
+
+```typescript
+function sum (x: number, y: number, z?: number): number {
+	if (z) return x + y + z;
+	else return x + y;
+}
+```
+
+在这里注意一下，可选参数后面不可再接必选参数。
+
+#### 参数默认值
+
+除了通过添加问号之外，我们还可以给参数添加默认值，使之成为一个可选参数，例如：
+
+```typescript
+function sum (x: number, y: number, z: number = 10): number {
+	return x + y + z;
+}
+```
+
+而这样给参数添加默认值的方法就不再受到限制，可以放在任意位置。
+
+#### rest 参数
+
+TypeScript 中也可以使用类似 ES6 中的 rest 参数来获取剩余参数。例如：
+
+```typescript
+function sum (x: number, y: number, z: number = 10, ...rest: number[]): number {
+	let sum = x + y + z;
+	rest.forEach(num => {
+		sum += num;
+	});
+	
+	return sum;
+}
+```
+
+#### 重载
+
+TypeScript 为 JavaScript 加上了重载。重载是指你可以通过给函数传递不同数量或类型的参数使得函数做出不同的处理。例如：
+
+```typescript
+function sum (x: number): number;
+function sum (x: string): string;
+function sum (x): any  {
+	if (typeof x === 'string') {
+		return '[String]: ' + x;
+	} else {
+		return x;
+	}
+}
+```
+
+注意到前两行都是函数定义，第三行是函数实现。
+
+### 类型断言 Type Assertion
+
+类型断言是指当你有个联合类型的变量时手动将它指定为具体类型。具体方法为在变量前面加上 `<type>`。 例如：
+
+```typescript
+function sum (x: number | string): number {
+	if (x.length) return true; // 报错
+	if ((<stirng>x).length) return true;  // 正确
+}
+```
+
+需要注意的是，类型断言只可以断言成联合类型中存在的类型，例如上面的例子，`x` 只能断言为 `number` 或者 `string`，否则将会报错。
+
+### 声明文件
+
+当我们在 TypeScript 使用第三方库时，需要引用第三方库的声明文件，例如我们要引入 jQuery，然而当我们在代码里直接使用 jQuery 时会报错，因为 TypeScript 并不知道 jQuery 是一个什么东西。所以这时我们就需要使用 `declare` 帮 TypeScript 判断 jQuery 是什么。例如：
+
+```typescript
+declare const jQuery: (string) => any;
+```
+
+之后我们就可以在后面使用 jQuery 了。
+
 ## 进阶
