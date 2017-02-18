@@ -329,7 +329,7 @@ function sum (x: number | string): number {
 
 需要注意的是，类型断言只可以断言成联合类型中存在的类型，例如上面的例子，`x` 只能断言为 `number` 或者 `string`，否则将会报错。
 
-### 声明文件
+### 声明 Declare
 
 当我们在 TypeScript 使用第三方库时，需要引用第三方库的声明文件，例如我们要引入 jQuery，然而当我们在代码里直接使用 jQuery 时会报错，因为 TypeScript 并不知道 jQuery 是一个什么东西。所以这时我们就需要使用 `declare` 帮 TypeScript 判断 jQuery 是什么。例如：
 
@@ -337,6 +337,35 @@ function sum (x: number | string): number {
 declare const jQuery: (string) => any;
 ```
 
-之后我们就可以在后面使用 jQuery 了。
+之后我们就可以在 TypeScript 里使用 jQuery 了。`declare` 只用于编译时的检查，输出中会被删除。
+
+#### 声明文件
+
+顾名思义声明文件就是我们把类型的声明放入的一个单独的文件，这个文件的后缀一般为 `.d.ts`。之后我们可以用形如 `/// <referrence path="path/to/your.d.ts">` 的方式来引用声明文件，例如：
+
+```typescript
+/// <reference path="path/to/jquery.d.tx">
+
+$body = jQuery('body');
+```
+
+TypeScript 在 2.0 的时候加入了 `@types` 来管理 TypeScript 的声明文件。我们可以通过 `npm install --save @types/lodash` 来下载已经写好的声明文件。然后就可以直接引入了。例如：
+
+```typescript
+import * as _ from "lodash";
+_.padStart("Hello TypeScript!", 20, " ");
+```
+
+P.S. 我们可以在 [TypeSearch](http://microsoft.github.io/TypeSearch/) 来搜索已有的声明文件。【最近官方的有些问题，可以先在[这里](https://rajington.github.io/TypeSearch/)搜索】
+
+### 内置对象
+
+JavaScript 中包括很多内置对象，我们可以在 TypeScript 中直接使用它们。
+
+传送门：[Standard built-in objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects)
+
+[TypeScript 核心库定义文件](https://github.com/Microsoft/TypeScript/tree/master/src/lib)
+
+注意，如果想用 TypeScript 写 Node.js，则需要引入 Node.js 的第三方文件，可以通过 `npm install --save @types/node` 来使用。
 
 ## 进阶
