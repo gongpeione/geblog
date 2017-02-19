@@ -649,3 +649,52 @@ const unknown = new Animal('unknown'); // ERROR
 const doge = new Dog('doge');
 console.log(doge.myName()) // doge
 ```
+
+#### 类与接口
+
+类可以实现（implements）接口。不同类中可能有相同的属性或是方法，我们可以把这些相同的属性和方法提取出来，定义为一个接口，其他类也可以去实现这个接口。例如：
+
+```typescript
+interface Animal {
+	weight: number;
+	eat();
+	sleep();
+}
+
+class Animal implements Animal {
+	public name;
+	public weight: number;
+	constructor (name) {
+		this.name = name;
+	}
+	eat () {
+		console.log('Animal can eat');
+	}
+	sleep () {
+		console.log('Animal can sleep');
+	}
+}
+
+class Human implements Animal {
+	public name;
+	public weight: number;
+	constructor (name) {
+		this.name = name;
+	}
+	eat () {
+		console.log('Human can eat');
+	}
+	sleep () {
+		console.log('Human can sleep');
+	}
+}
+```
+
+我们注意到抽象类也可以实现和接口类似的功能，那么这两者之间有什么区别呢？
+
+1. 一个类只可以继承一个父类，却可以实现很多个接口。
+2. 接口是没有自己的属性和方法的，而抽象类可以。
+
+### 泛型
+
+
