@@ -180,7 +180,7 @@ let mySquare = createSquare({color: "black"});
 
 #### 只读属性 Readonly properties
 
-有一些属性可能不能去更改它，那么就可以在定义时在属性前面加上 `readonly`，那么在变量声明赋值之后就不能再更改属性的值了。这个和 ECMAScript 2015 里的 `const` 比较类似。那么什么时候用 `readonly` 什么时候用 `const` 呢？当然是变量使用 `const` 而属性使用 `readonly`。
+有一些属性可能不能去更改它，那么就可以在定义时在属性前面加上 `readonly`，那么在变量声明赋值之后就不能再更改属性的值了。这个和 ECMAScript 6 里的 `const` 比较类似。那么什么时候用 `readonly` 什么时候用 `const` 呢？当然是变量使用 `const` 而属性使用 `readonly`。
 
 例子：
 
@@ -369,3 +369,283 @@ JavaScript 中包括很多内置对象，我们可以在 TypeScript 中直接使
 注意，如果想用 TypeScript 写 Node.js，则需要引入 Node.js 的第三方文件，可以通过 `npm install --save @types/node` 来使用。
 
 ## 进阶
+
+
+### 类型别名
+
+不多说，看代码：
+
+```typescript
+type num = number;
+type str = string;
+type numOrStr = num | str;
+
+const test: numOrStr = 1;
+```
+
+### 字符串字面量类型
+
+字符串字面量类型可以用来把取值限制在几个字符串之中，例如：
+
+```typescript
+type javascript = 'good' | 'perfect' | 'awesome' | 'wonderful';
+
+const js: javascript = 'bad' // ERROR!
+const myJS: javascript = 'good' // PASS
+```
+
+### 元组 Tuple
+
+啥是元组？元组声明了一个数组并且规定了数组内每个元素的类型。例如
+
+```typescript
+let Tree: [stirng, number] = ['Pei Gong', 24];
+```
+这里需要注意的是，如果数组的元素超过了元组规定的，那么后面的元素会被限制为元组规定的各个类型的联合类型。
+
+
+### 枚举 Enum
+
+// TODO
+
+### 类 Class
+
+ES6 中已经有类了，虽说是个语法糖但写起来也是简单了不少，TypeScript 的类除了实现 ES6 中的功能之外，还包括了其他的用法。
+
+### ECMAScript 6 中的类
+
+首先简单介绍下 ES6 中类的概念，具体内容可以阮一峰的 [ECMAScript 6 入门](http://es6.ruanyifeng.com/#docs/class)
+
+#### 基本写法
+
+TypeScript 通过 `class` 定义一个类：
+
+```javascript
+class Animal {
+	constructor (name) {
+		this.name = name;
+	}
+	myName () {
+		return this.name;
+	}
+}
+```
+
+如上所示，使用 `class Animal {}` 来定义一个名为 Animal 的类，类名一般以大写字母开头，constructor 则是类的构造函数，在新建实例时会自动调用 `constructor`。
+
+#### 继承 Extends
+
+通过 `extends` 可以为当前类指定继承一个父类，例如：
+
+```javascript
+class Dog extends Animal {
+	constructor (name) {
+		super(name);
+	}
+}
+const doge = new Dog('doge');
+doge.myName(); // doge
+```
+
+如上所示，使用 `class Dog extends Animal {}` 来定义一个继承自 `Animal`, 名为 Dog 的类。在子类中用super来表示父类，通过 `super()` 来调用父类的 `constructor` 以继承父类的属性。通过 `super.myName()` 可以调用父类的方法。
+
+#### 存取器 Getter & Setter
+
+通过 getter 和 setter 我们可以改变属性的赋值&读取方式，例如：
+
+```javascript
+class Animal {
+ 	private _name = '';
+	constructor (name) {
+		this.name = name;
+	}
+	myName () {
+		return this.name;
+	}
+	get name () {
+		return this._name;
+	}
+	set name (newVal) {
+		this._name = '[Animal] ' + newVal;
+	}
+}
+const unknown = new Animal('unknown');
+
+console.log(unknown.name); // [Animal] unknown
+
+unknown.name = 'known';
+
+console.log(unknown.name); // [Animal] known
+```
+
+#### 静态方法
+
+如果在方法前面加上 `static` 修饰符，那么这个方法被称为静态方法。这些方法不需要实例化可以直接通过类来调用，例如：
+
+```javascript
+class Animal {
+	constructor (name) {
+		this.name = name;
+	}
+	myName () {
+		return this.name;
+	}
+	static isAnimal (obj) {
+		return obj instanceof Animal;
+	}
+}
+const unknown = new Animal('unknown');
+Animal.isAnimal(unknown) // true
+Animal.isAnimal({}) // false
+```
+
+#### 静态属性
+
+类的静态属性是指类本身的属性，而不是定义在实例上的属性，即你只能通过 `ClassName.prop` 来获取这个值。例如：
+
+```javascript
+class Animal {
+	constructor (name) {
+		this.name = name;
+	}
+}
+Animal.amount = 8.7e6;
+console.log(Animal.amount); // 8700000
+```
+
+需要注意的是，ES6 还不支持在类里定义静态属性。
+
+### ECMAScript 7 中的类
+
+ES7 中还有一些关于类的提案，TypeScript 中也都实现了。
+
+#### 实例属性
+
+ES7 在提案中可以在类里直接定义实例属性，例如：
+
+```javascript
+class Animal {
+	name = 'unknown';
+	constructor (name) {
+		this.name = name;
+	}
+}
+```
+
+#### 实例属性
+
+ES7 在提案中可以在类里定义静态属性，例如：
+
+```javascript
+class Animal {
+	static amount = 8.7e6;
+	constructor (name) {
+		this.name = name;
+	}
+}
+console.log(Animal.amount); // 8700000
+```
+
+### TypeScript 中的类
+
+#### 修饰符 Modifiers
+
+TypeScript 中的修饰符包括以下几种：
+
+- public 公有属性/方法，任何地方都能使用
+- private 私用属性/方法，不能在类的外部使用
+- protected 保护属性/方法，可以在本类或子类里使用
+
+下面举个例子：
+
+`public` 修饰的属性或方法可以随意访问
+
+```typescript
+class Animal {
+	public name;
+	constructor (name) {
+		this.name = name;
+	}
+}
+const unknown = new Animal('unknown');
+console.log(unknown.name) // unknown
+unknown.name = 'known'
+console.log(unknown.name) // known
+```
+
+`private` 修饰的属性或方法不可以访问。需要注意的是编译之后的 JavaScript 代码是没有限制 `private` 的访问的。
+
+```typescript
+class Animal {
+	public name;
+	private hide;
+	constructor (name) {
+		this.name = name;
+		this.hide = 'hide';
+	}
+}
+class Dog {
+	constructor (name) {
+		super(name);
+	}
+	hide () {
+		return this.hide;
+	}
+}
+const unknown = new Animal('unknown');
+console.log(unknown.hide) // ERROR
+
+const doge = new Dog('doge');
+console.log(doge.hide()) // ERROR
+```
+
+而使用 `protected` 修饰的属性或是方法则在子类可以访问：
+
+```typescript
+class Animal {
+	public name;
+	protected value;
+	constructor (name) {
+		this.name = name;
+		this.value = 'value';
+	}
+}
+class Dog {
+	constructor (name) {
+		super(name);
+	}
+	value () {
+		return this.value;
+	}
+}
+const unknown = new Animal('unknown');
+console.log(unknown.hide) // ERROR
+
+const doge = new Dog('doge');
+console.log(doge.value()) // value
+```
+
+#### 抽象类
+
+抽象类是什么？抽象类是一个不允许实例化的类，他的属性和方法要在子类里实现。例如：
+
+```typescript
+abstract class Animal {
+	public name;
+	constructor (name) {
+		this.name = name;
+	}
+	myName () {
+		return this.name;
+	}
+}
+class Dog extends Animal {
+	constructor (name) {
+		super(name);
+	}
+}
+const unknown = new Animal('unknown'); // ERROR
+
+const doge = new Dog('doge');
+console.log(doge.myName()) // doge
+```

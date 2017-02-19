@@ -93,7 +93,8 @@ export default {
         margin: .2rem 0;
         background: #f0f5f7;
         overflow-x: auto;
-        border-radius: 3px
+        border-radius: 3px;
+        line-height: 1.5;
     }
     code {
         background: #f0f5f7;
