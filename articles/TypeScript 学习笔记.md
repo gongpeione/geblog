@@ -695,6 +695,14 @@ class Human implements Animal {
 1. 一个类只可以继承一个父类，却可以实现很多个接口。
 2. 接口是没有自己的属性和方法的，而抽象类可以。
 
-### 泛型
+### 泛型 Generics
 
+前文已经用到过泛型了，那么泛型是什么呢？泛型是指在定义函数、接口、类时，不指定具体的类型而是在调用时再指定，例如：
 
+```typescript
+function ArrayGenerator<T> (length: number, value: T): Array<T> {
+	return Array(length).fill(value);
+}
+
+ArrayGenerator<string>(2, 'A') // ['A', 'A']
+```
