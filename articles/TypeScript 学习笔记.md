@@ -706,3 +706,67 @@ function ArrayGenerator<T> (length: number, value: T): Array<T> {
 
 ArrayGenerator<string>(2, 'A') // ['A', 'A']
 ```
+
+你可以给泛型定义多个类型参数：
+
+```typescript
+function swap<T, U>(tuple: [T, U]): [U, T] {
+	return [tuple[1], tuple[0]];
+}
+swap([7, 'seven']) // ['seven', 7]
+```
+
+泛型还可以约束他的参数类型，例如：
+
+```typescript
+interface Lengthwise {
+	length: number
+}
+function length<T extends Lengthwise>(arg: T): T {
+	return arg.length;
+}
+```
+
+我们还可以用带泛型的接口来定义函数：
+
+```typescript
+interface CreateArrayFunc {
+	<T>(length: number, value: T): Array<T>
+}
+let createArray: CreateArrayFunc;
+createArray = function<T>(length: number, value: T): Array<T> {
+	return Array(length).fill(value);
+}
+```
+
+泛型同样可以使用在类的定义当中：
+
+```typescript
+class GenericNumber<T> {
+	zeroValue: T;
+	add: (x: T, y: T) => T;
+}
+```
+
+
+### 声明合并
+
+如果定义了两个相同的函数接口或类，那么后面的不会覆盖前面的，而是会被合并成一个。
+
+例如接口的合并：
+
+```typescript
+interface Test {
+	haha: number;
+}
+interface Test {
+	nono: string
+}
+// 相当于
+
+interface Test {
+	haha: number;
+	nono: string
+}
+
+```
