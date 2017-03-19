@@ -110,3 +110,129 @@ URI(Uniform Resource Identifier) 则是统一资源标识符，是用字符串�
 
 历史是什么可以吃么？略过
 
+## 简单的 HTTP 协议
+
+### 请求报文
+
+```
+POST(方法) /login.php(URI) HTTP/1.1(协议版本)
+Host: geeku.net
+Connection: keep-alive
+Content-Type: application/x-www-from-urlencoded
+Content-length: 16
+(请求首部字段)
+
+name=admin&password=admin
+(内容实体)
+```
+
+### 响应报文
+
+```
+HTTP/1.1(协议版本) 200(状态码) OK(状态码原因短语)
+Data: Tue, 10 July 2012 06:11:11 GMT
+Content-Length: 333
+Content-Type: text/html
+(响应首部字段)
+
+<html>...
+(主体)
+```
+
+### HTTP 是无状态协议
+
+HTTP 是一个无状态的协议，即不保存之间的通信状态，不过可以使用 Cookie 来管理状态。
+
+### HTTP 方法
+
+- GET 获取资源
+- POST 传输实体主体
+- PUT 传输文件
+- HEAD 获取报文首部，不返回主体部分
+- DELETE 删除文件
+- OPTIONS 询问支持的方法
+- TRACE 跟踪路径
+- CONNECT 要求用隧道协议连接代理
+
+其中 GET，POST，PUT，DELETE 可以与 REST 风格的 API 一一对应
+
+- GET 对应 SELECT
+- POST 对应 UPDATE
+- PUT 对应 CREATE
+- DELETE 对应 DELETE
+
+### 持久化连接 keep-alive
+
+持久化连接的好处在于可以减少 TCP 链接的重复建立与断开造成的额外开销。
+
+### 管线化
+
+管线化之后可以并行发送多个请求而不用一个接一个的发送响应等待响应了。
+
+### Cookie
+
+服务器端可以给客户端发送一个 `Set-Cookie` 的首部字段，客户端就会把这个字段的内容保存下来，下次发送请求时客户端就自动在请求报文中加入 Cookie 之后发送给服务端，服务端就可以通过这个来判断不同的客户端了。
+
+## HTTP 报文
+
+HTTP 报文大致分为报文首部和报文主体两个部分，通过空行来划分，报文主体是可选项。
+
+### 报文结构
+
+响应报文和请求报文的结构大致相同。大致分为报文首部和报文主体两个部分。其中首部的结构如下：
+
+- 请求行（请求报文，例：GET / HTTP/1.1）/状态行（响应报文,例：HTTP/1.1 200 OK）
+- 请求/响应首部字段
+- 通用首部字段
+- 实体首部字段
+- 其他
+
+### 压缩编码
+
+通常来说，报文主体等于实体主题，但当传输过程中进行了压缩编码操作是，实体主体的内容发生了变化，才和报文主体产生差异。
+
+#### 常见内容编码
+
+- gzip（GNU zip）
+- compress（UNIX 系统标准压缩）
+- deflate（zlib）
+- indentify（不进行编码）
+
+
+#### 分块编码
+
+可以把大容量数据分块传输，让客户端逐步显示页面。
+
+### MIME 
+
+MIME 即 Multipurpose Internet Mail Extensions，它允许邮件处理各种不同类型的数据，例如文本，图片，视频等。HTTP 协议中也采纳了这个。
+
+MIME 包含的对象如下：
+
+- multipart/from-data Web表单上传
+- multipart/byteranges 
+
+
+### 内容协商
+
+判断基准：
+
+- Accept
+- Accept-Charset
+- Accept-Encoding
+- Accept-Language
+- Content-Language
+
+类型：
+
+- 服务器驱动协商 Server-driven Negotiation 由服务器进行内容协商
+- 客户端驱动协商 Agent-driven Negotiation 由客户端进行内容协商
+- 透明驱动协商 Transparent Negotiation 由两者各自进行内容协商
+
+
+## 状态码
+
+状态码是用来描述返回请求的结果的数字。用户可以通过状态码判断请求的成功或是失败等。
+
+
+
