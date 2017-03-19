@@ -86,40 +86,38 @@ iAmNumOrString = 'String';
 
 鸭子类型总结起来就是，不关注本身是什么，只关注某些方面是否相同。这就是 TypeScript 里接口的作用。
 
->这里稍微扩展一下。`arguments` 其实是一个形如 `{ 0: 1, 1: 2, length: 2 }` 的一个对象，那么为什么 `arguments` 可以通过类似 `[].push.call(arguments, 0)` 这样的方式使用真·数组的方法呢。翻看 Google 的 V8 引擎处理数组的源代码就可以大概了解到了，关于数组的源码地址在这里：[array.js](https://github.com/v8/v8/blob/master/src/js/array.js)。
+这里稍微扩展一下。`arguments` 其实是一个形如 `{ 0: 1, 1: 2, length: 2 }` 的一个对象，那么为什么 `arguments` 可以通过类似 `[].push.call(arguments, 0)` 这样的方式使用真·数组的方法呢。翻看 Google 的 V8 引擎处理数组的源代码就可以大概了解到了，关于数组的源码地址在这里：[array.js](https://github.com/v8/v8/blob/master/src/js/array.js)。
+这里以数组的 `push` 为例：
 
->这里以数组的 `push` 为例：
-
->```javascript
+```javascript
 // 把所有参数附加到数组的最后并且返回新的数组长度
 // Appends the arguments to the end of the array and returns the new
 // length of the array. See ECMA-262, section 15.4.4.7.
 function ArrayPush() {
   CHECK_OBJECT_COERCIBLE(this, "Array.prototype.push");
-
->  var array = TO_OBJECT(this); // 获取数组
+  var array = TO_OBJECT(this); // 获取数组
   var n = TO_LENGTH(array.length); // 获取数组的length
   var m = arguments.length; // 获取参数的length
 	
->  // 不管
+  // 不管
   // Subtract n from kMaxSafeInteger rather than testing m + n >
   // kMaxSafeInteger. n may already be kMaxSafeInteger. In that case adding
   // e.g., 1 would not be safe.
   if (m > kMaxSafeInteger - n) throw %make_type_error(kPushPastSafeLength, m, n);
 	
->  // 依次将参数附加到数组中
+  // 依次将参数附加到数组中
   for (var i = 0; i < m; i++) {
     array[i+n] = arguments[i];
   }
 
->  var new_length = n + m;
+  var new_length = n + m;
   array.length = new_length;
   return new_length;
 }
 ```
-> 从源码可以看出其实数组的 `push` 方法完全没有涉及到判断它是不是一个真的数组，只和 `length` 有关。这就是鸭子类型很典型的体现。
+从源码可以看出其实数组的 `push` 方法完全没有涉及到判断它是不是一个真的数组，只和 `length` 有关。这就是鸭子类型很典型的体现。
 
-> 参考：[深入理解JAVASCRIPT类数组](http://hao.jser.com/archive/10357/)
+参考：[深入理解JAVASCRIPT类数组](http://hao.jser.com/archive/10357/)
 
 TypeScript 的接口使用方法如下。
 
