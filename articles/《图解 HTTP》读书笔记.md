@@ -235,4 +235,46 @@ MIME 包含的对象如下：
 状态码是用来描述返回请求的结果的数字。用户可以通过状态码判断请求的成功或是失败等。
 
 
+### 状态码的类别
 
+- 1XX Infomational 接收的请求正在处理
+- 2XX Success 请求正常处理完毕
+- 3XX Redirection 重定向
+- 4XX Client Error 服务器无法处理请求
+- 5XX Server Error 服务器处理请求出错
+
+### 最常用的14种
+
+#### 2XX
+
+- 200 OK 表示请求正常处理了。 
+- 204 No Content 请求处理成功但没有资源可以返回，即响应报文里不含实体的主体部分，一般用在只需客户端给服务端发送信息而客户端不需要新内容时。
+- 206 Partial Content 只需要资源的一部分，HEAD 中包括 `Content-Range`。
+
+#### 3XX
+
+- 301 Moved Permanently URI 永久性重定向。
+- 302 Found URI 临时性重定向
+- 303 See Other 303 和 302 很相似，但是 303 是指希望客户端能以 GET 方法重定向到另一个 URI。
+- 304 Not Modified 资源未改变，可以直接使用未过期的缓存
+- 307 Temporary Redirect 临时重定向，307 会遵照浏览器标准，不会把 POST 变成 GET。
+
+> 301 302 303 这三个状态码几乎所有的浏览器都会把 POST 方法改成 GET 方法并删除请求报文内的主体，之后请求会自动再次发送
+> 
+> 301 302 标准是禁止将 POST 方法改变成 GET方法的，但是实际使用时大家都会这么做
+
+
+
+#### 4XX
+
+- 400 Bad Request 请求报文中存在语法错误
+- 401 Unauthorized 请求需要通过 HTTP 认证（BASIC，DIGEST），需要包含一个 `WWW-Authenticate` 的 HEAD 以通过认证
+- 403 Forbidden 没有权限不允许访问这个资源
+- 404 Not Found 服务器上找不到这个资源
+
+
+#### 5XX
+
+- 500 Internal Server Error 服务器出现错误
+- 502 Bad Gateway 错误的网关，一般是连接超时产生的
+- 503 Server Unavailable 服务器处于超负载状态或者停机维护
