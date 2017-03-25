@@ -301,3 +301,69 @@ MIME 包含的对象如下：
 #### 隧道
 
 隧道可以按要求建立起一条与其他服务器的通信线路。
+
+
+## HTTP 首部
+
+### 报文首部结构
+
+#### 请求报文
+
+请求报文的首部有以下内容
+
+1. 请求行：包括方法、URI、HTTP版本，eg GET / HTTP/1.1
+2. 请求首部字段
+3. 通用首部字段
+4. 实体首部字段
+5. 其他
+
+#### 响应报文
+
+响应报文的首部有以下内容
+
+1. 状态行：包括HTTP版本、状态码，eg [HTTP/1.1 304 Not Modified]
+2. 请求首部字段
+3. 通用首部字段
+4. 实体首部字段
+5. 其他
+
+### HTTP 首部字段
+
+首部字段根据用途分为四种类型：
+
+1. 通用首部字段 General Header Fields
+2. 请求首部字段 Request Header Fields
+3. 响应首部字段 Response Header Fields
+4. 实体首部字段 Entity Header Fields 补充内容资源更新时间等与实体有关的信息
+
+
+#### 通用首部字段
+
+##### Cache-Control
+
+控制缓存的行为。
+
+缓存请求指令
+
+- no-cache 强制向原服务器再次验证
+- no-store 不缓存
+- max-age=xxs 响应最大Age值
+- max-stale=xxs 接受已过期的响应
+- min-fresh=xxs 期望在指定时间内的响应仍有效
+- no-transform 代理不可更改媒体类型
+- only-if-cached 从缓存获取资源
+- cache-extension 新指令标记
+
+缓存响应指令
+
+- public 其他用户也可以用缓存
+- private 仅向特定用户返回响应
+- no-cache 缓存前必须先确认其有效性
+- no-store 不缓存请求或响应的任何内容
+- no-transform 代理不可更改媒体类型
+- must-revalidate 可缓存但必须再想源服务器进行确认
+- proxy-revalidate 要求中间缓存服务器对缓存的响应有效性再进行确认
+- max-age=xxs 响应的最大Age值
+- s-maxage=xxs 缓存服务器响应的最大Age值
+- cache-extension 新指令标记
+
