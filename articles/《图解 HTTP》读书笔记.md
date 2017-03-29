@@ -367,3 +367,257 @@ MIME 包含的对象如下：
 - s-maxage=xxs 缓存服务器响应的最大Age值
 - cache-extension 新指令标记
 
+##### Connection
+
+- 控制不再转发给代理的首部字段
+- 管理持久连接
+
+
+##### Date
+
+创建报文的日期时间
+
+##### Pragma
+
+历史遗留字段，唯一用法: `Pragma: no-cache`,表示不接受缓存
+
+##### Trailer
+
+表示报文主体后记录了哪些首部字段，例如 `Trailer: Expires ...报文主体... Expires: xxx`。
+
+##### Transfer-Encoding
+
+规定了主体的编码方式，HTTP/1.1 中仅对分块传输编码有效。`Transfer-Encoding: chunked`。
+
+##### Upgrade
+
+用于检测 HTTP 协议及其他协议是否能使用更高版本进行通信。
+
+例如:
+
+```
+// 请求
+GET /index.html HTTP/1.1
+Upgrade: TLS/1.0
+Connection: Upgrade
+
+// 响应
+HTTP/1.1 101 Switching Protocols
+Upgrade: TLS/1.0, HTTP/1.1
+Connection: Upgrade
+```
+
+##### Via
+
+报文的传输路径。
+
+
+##### Warning
+
+告知用户与缓存相关的问题的警告。
+
+
+#### 请求首部字段
+
+##### Accept
+
+表示用户代理能处理的媒体类型和媒体类型的相对优先级。
+
+
+##### Accept-Charset
+
+表示用户代理支持的字符集和字符集的相对优先级。
+
+##### Accept-Encoding
+
+表示用户代理支持的内容编码和内容编码的优先级。
+
+##### Accept-Language
+
+表示用户代理能够处理的自然语言集和他们的相对优先级。
+
+##### Authorization
+
+用户代理的认证信息。
+
+##### Expect
+
+告知服务器客户端期望出现的某种特定行为。
+
+##### From
+
+客户端告知服务器电子邮件地址。
+
+##### Host
+
+告知服务器请求资源所处的互联网主机名和端口号。这是唯一一个必须包含的首部字段。
+
+##### If-Match
+
+条件请求，只有条件为真时才执行请求。后面跟着的是 `ETag` 的值。
+
+##### If-Modified-Since
+
+如果服务器资源的更新时间比这个值晚，则希望处理这个请求。
+
+##### If-None-Match
+
+如果这个值和 `ETag` 的值不一致时才处理该请求。
+
+##### If-Range
+
+如果时间或 `ETag` 和请求的资源一致时才作为范围请求处理，否则全部返回。
+
+##### If-Unmodified-Since
+
+和 `If-Modified-Since` 作用相反。如果服务器资源的更新时间比这个值早，则希望处理这个请求。
+
+##### Max-Forwards
+
+指定可经过的服务器的最大数目。
+
+##### Proxy-Authorization
+
+代理服务器的认证信息。
+
+##### Range
+
+对于只需获取部分资源的范围需求。
+
+##### Referer
+
+告知服务器请求的原始资源的 URI。
+
+##### TE
+
+表示客户端能处理响应的传输编码方式和相对优先级。和 `Accept-Encoding` 很相似，不同的是这个是用于传输编码。
+
+##### User-Agent
+
+客户端的浏览器和用户代理名称等信息传递给服务器。
+
+
+#### 响应首部字段
+
+##### Accept-Ranges
+
+服务器告知客户端是否能处理范围请求。
+
+##### Age
+
+表示源服气在多久之前创建了响应。
+
+##### ETag
+
+资源的唯一性标识。
+
+##### Location
+
+将客户端引导至与请求 URI 位置不同的资源。
+
+
+##### Proxy-Authenticate
+
+代理服务器所要求的认证信息发送给客户端。
+
+##### Retry-After
+
+告知客户端多久之后再次发送请求。
+
+##### Server
+
+告知客户端服务器的 HTTP 服务器应用程序信息。
+
+##### Vary
+
+告知代理服务器只对相同自然语言的请求返回缓存。
+
+##### WWW-Authenticate
+
+用于 HTTP 访问认证，告知客户端认证方案。
+
+
+#### 实体首部字段
+
+用于补充内容的更新时间等与实体相关的信息。
+
+##### Allow
+
+告知客户端服务器嗦支持的 HTTP 方法。
+
+##### Content-Encoding
+
+告知客户端主体部分的内容编码方式。
+
+##### Content-Language
+
+主体使用的自然语言。
+
+##### Content-Length
+
+主体部分的大小（字节）
+
+##### Content-Location
+
+主体返回资源对应的 URI。
+
+
+##### Content-MD5
+
+用于检查主体是否完整。
+
+##### Content-Range
+
+告知客户端返回的是主体的哪一部分。
+
+##### Content-Type
+
+主体对象的媒体类型。
+
+##### Expires
+
+告知客户端资源失效日期。如果 Cache-Control 有指定 `max-age` 时，则优先处理 max-age
+
+##### Last-Modified
+
+指明资源最终修改时间。
+
+
+#### 为 Cookie 服务的首部字段
+
+##### Set-Cookie 
+
+开始状态管理所使用的 Cookie 信息
+
+- NAME=Value 必需项，赋予 Cookie 名称和值
+- expires=DATA 有效期，若不指定则默认为浏览器关闭为止
+- path=PATH 服务器上的文件目录作为 Cookie 的适用对象，默认为文档所在目录
+- domain=DOMAIN 作为 Cookie 适用对象的域名，默认为创建 Cookie 的域名
+- Secure 仅在 HTTPS 发送
+- HttpOnly 不允许 JavaScript 访问
+
+##### Cookie 
+
+服务器接收到的 Cookie 信息
+
+
+#### 其他首部字段
+
+##### X-Frame-Options
+
+用于控制网站内容在其他网站的 Frame 标签内的显示问题。
+
+- DENY 拒绝
+- SAMEORIGIN 仅限同源域名
+
+##### X-XSS-Protection
+
+用于控制浏览器 XSS 防护机制的开关。
+
+##### DNT
+
+Do Not Track，表示拒绝个人信息被收集。
+
+##### P3P
+
+利用 P3P（The Platform for Privacy Preference 在线隐私偏好平台）。可以让网站上的个人隐私变成一种仅供程序可理解的形式。
