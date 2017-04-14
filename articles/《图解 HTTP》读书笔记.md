@@ -630,3 +630,110 @@ HTTP 的缺点
 - 不验证身份可能遭伪装
 - 无法证明报文完整性，可能被篡改
 
+HTTPS = HTTP + 加密 + 认证 + 完整性保护
+
+HTTPS 其实就是套了一层 SSL 的 HTTP。而 SSL 不只适用于 HTTP，其他应用层的各种协议都可以配合 SSL 使用
+
+
+### 对称加密和非对称加密
+
+对称加密也叫公开密钥加密（Public-key cryptography）。对称加密是指使用同一个密钥可以加密内容或者解密用这个密钥加密的内容。如果通过这种方法加密内容发送给其他人时，则要同时把密钥也发送给对方，这就带来了隐患，如果通信过程中被第三方监听了，那么加密的内容和密钥都会被第三方获得，第三方可以很轻易的使用密钥解密内容。
+
+非对称加密解决的就是这个问题。非对称加密使用的不是一个密钥而是两个，一个叫公钥（public key），一个叫私钥（private key）。任何人都可以使用公钥加密内容，而加密后的内容只能通过私钥解密。那么只要一方单独保存好私钥，把公钥发送给对方，对方使用公钥加密内容之后再发送回来，我方就可以使用私钥解密内容了。
+
+### HTTPS 和对称/非对称加密
+
+非对称加密虽然安全但是处理速度要慢上不少，于是 HTTPS 就充分的利用了这两者的优势，在交换密钥时使用非对称加密，交换完毕之后就切换到对称加密。
+
+### HTTPS 通信步骤
+```
+-> 客户端到服务器
+<- 服务器到客户端
+```
+
+1. Handshake: ClientHello ->
+2. Handshake: ServerHello <-
+3. Handshake: Certificate <-
+4. Handshake: ServerHelloDone <-
+5. Handshake: ClientKeyExchange ->
+6. ChnageCipherSpec ->
+7. Handshake: Finished ->
+8. ChangeCipherSpec <-
+9. Handshake: Finished <-
+10. Application Data ->
+11. Application Data <-
+12. Alert: warning, close nitify ->
+
+
+## 认证
+
+### HTTP 认证方式
+- BASIC 认证 基本认证 `401 => username:password => base64 => 200`
+- DIGEST 认证 摘要认证 `401(realm, nonce) => MD5() => 200`
+- SSL 客户端认证 
+- FormBase 认证 基于表单认证（大多数）
+
+## 基于 HTTP 的功能追加协议
+
+### HTTP 瓶颈
+
+- 一条连接上只能一个请求
+- 请求只能由客户端发起
+- 头部传送未压缩且冗长
+- 未强制要求压缩
+
+### AJAX&COMET
+
+这两者可以在一定程度上优化 HTTP 的瓶颈，Ajax 可以通过 JavaScript 发送请求获取数据，局部更新页面，这样使得响应中的数据了可以大大减少。Comet 则是模拟服务器端向客户端推送的功能。
+
+### SPDY
+
+Ajax 和 Comet 只能一定程度上优化 HTTP 的瓶颈，然而对 HTTP 协议本身的限制依旧是毫无作用。SPDY 的出现就是为了在协议级别消除 HTTP 的瓶颈
+
+- 多路复用流
+- 赋予请求优先级
+- 压缩头部
+- 推送功能
+- 服务器提示功能
+
+### WebSocket
+
+WebSocket 是一个客户端与服务器之间的全双工通信标准。他的出现是为了解决 Ajax 和 Comet 的缺陷所引发的问题。
+
+使用 WebSocket 的双方都可以向对方发送任意格式的数据。
+
+#### 握手
+
+**请求**：为了实现 WebSocket 通信，需要在 HTTP 头中带上 `Upgrade: websocket`，以告诉服务器通信协议发生改变。除了 `Upgrade` 之外，还需要带上 `Sec-WebSocket-Key: xxxxx`，这个字段的内容是记录着握手过程中必不可少的键值。`Sec-WebSocket-Protocol: xxx` 里则记录了使用的子协议。
+
+**响应**：响应头返回 `HTTP/1.1 101 Switching Protocols` 以表示协议切换成功，还包括 `Connection: Upgrade` 和 `Upgrade: websocket`, `Sec-WebSocket-Accept: xx` 这个字段的内容是由握手请求中的 `Sec-WebSocket-Key` 生成的。
+
+握手成功建立连接之后，通信就不再使用 HTTP 的数据帧了，而是使用 WebSocket 独立的数据帧。
+
+#### HTTP/2.0
+
+HTTP/2.0 在 2014 年 11 月实现了标准化。目的是为了改善用户使用 Web 时的速度体验。HTTP/2.0 有如下一些技术：
+
+- 压缩 
+- 多路复用
+- TLS 义务化
+- 协商
+- 客户端Pull/服务器Push
+- 流量控制
+- WebSocket
+
+#### WebDAV
+
+WebDAV 是一个可以对 Web 服务器上的内容直接进行操作的分布式文件系统。
+
+
+## 构建 HTTP 内容的技术
+
+这章就不过多描述了，主要就是大概介绍了一下 HTML/XML、CSS、JavaScript、CGI、Servlet、RSS、JSON
+
+## Web 的攻击技术
+
+这一章也是简单的介绍了 XSS、SQL 注入、OS 命令注入、HTTP 头部注入、邮件头部注入、目录遍历、远程文件包含等。这些内容应该会再看过 Web 安全的书籍之后再做总结。
+
+
+
