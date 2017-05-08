@@ -2,3 +2,6 @@ $dark: #323744;
 $blue: #1C89F5;
 $dark-gray: #909BB5;
 $gray: #B2CDE7;
+@mixin blueGrident {
+  background-image: linear-gradient(-90deg, #3CBEFB 0%, #1C89F5 100%);
+}

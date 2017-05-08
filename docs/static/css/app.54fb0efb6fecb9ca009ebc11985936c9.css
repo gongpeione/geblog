@@ -102,12 +102,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 footer {
   width: 100%;
-  background: #1C89F5;
+  background-image: linear-gradient(-90deg, #3CBEFB 0%, #1C89F5 100%);
   padding: .4rem;
   text-align: center;
+  position: relative;
 }
 footer a {
     color: rgba(255, 255, 255, 0.6);
+}
+footer canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
 }
 
 @charset "UTF-8";
@@ -4661,4 +4669,4 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
 }
 
-/*# sourceMappingURL=app.6fc24051bc53160084644228d13465a4.css.map*/
+/*# sourceMappingURL=app.54fb0efb6fecb9ca009ebc11985936c9.css.map*/

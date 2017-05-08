@@ -3,7 +3,8 @@ export default {
     articles: 'https://api.github.com/repos/gongpeione/geblog/contents/articles'
   },
   category: {
-    draft: 'draft'
+    draft: 'draft',
+    hidden: 'hidden'
   },
   menu: [
     {

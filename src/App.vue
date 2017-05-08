@@ -17,6 +17,7 @@
       <router-view></router-view>
     </div>
     <footer>
+      <canvas class="footer-bg" ref="canvas"></canvas>
       <a href="/">Blog.Geeku.Net</a>
     </footer>
     <div class="totop" @click.native="totop"></div>
@@ -25,6 +26,7 @@
 
 <script>
   import config from './config';
+  import Paricle from './lib/particle';
 
   export default {
     name: 'app',
@@ -34,6 +36,16 @@
       }
     },
     created () {
+
+    },
+    mounted () {
+      const canvaRect = this.$refs.canvas.getBoundingClientRect();
+      const pa = new Paricle(this.$refs.canvas, {
+        width: canvaRect.width,
+        height: canvaRect.height,
+        opacity: .2
+      });
+      console.log(pa);
     },
     methods: {
       totop () {
@@ -111,12 +123,20 @@
 
   footer {
     width: 100%;
-    background: $blue;
+    @include blueGrident;
     padding: .4rem;
     text-align: center;
+    position: relative;
 
     a {
       color: rgba(255,255,255, .6)
+    }
+    canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
     }
   }
 </style>
