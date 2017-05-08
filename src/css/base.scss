@@ -1,0 +1,62 @@
+@import "./color.scss";
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100px;
+}
+
+body,
+html {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  //background: #eee;
+  font-size: .16rem;
+  line-height: 2;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  font-weight: 300;
+  color: $dark;
+}
+
+a,
+a:hover {
+  text-decoration: none;
+}
+
+h1 {
+  font-size: .3rem;
+}
+
+h2 {
+  font-size: .26rem;
+}
+
+h3 {
+  font-size: .22rem;
+}
+
+h4, h5, h6 {
+  font-size: .2rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+p {
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: $dark;
+  font-weight: 300;
+}
+
+$gap-tiny: .05rem;
+$gap-small: .1rem;
+$gap-middle: .15rem;
+$gap-large: .2rem;
+$gap-huge: .8rem;
