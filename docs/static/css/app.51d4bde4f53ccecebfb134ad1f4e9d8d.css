@@ -102,7 +102,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 footer {
   width: 100%;
-  background-image: linear-gradient(-90deg, #3CBEFB 0%, #1C89F5 100%);
+  background-image: linear-gradient(180deg, #3CBEFB 0%, #1C89F5 100%);
   padding: .4rem;
   text-align: center;
   position: relative;
@@ -4669,4 +4669,4 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
 }
 
-/*# sourceMappingURL=app.54fb0efb6fecb9ca009ebc11985936c9.css.map*/
+/*# sourceMappingURL=app.51d4bde4f53ccecebfb134ad1f4e9d8d.css.map*/

@@ -42,30 +42,37 @@ class Particle {
     this.circleList.forEach(circle => {
       circle.x += circle.vx;
       circle.y += circle.vy;
+      circle.radius += .05;
+
+      // circle.vx = this.random(-2, 2);
       if (circle.x > (this.width + circle.radius)) {
-        circle.x = -circle.radius;
-        circle.vx = this.random(0, 5);
+        // circle.x = -circle.radius;
+        // circle.vx = this.random(0, 5);
       }
       if (circle.y > (this.height + circle.radius)) {
-        circle.y = -circle.radius;
-        circle.vy = this.random(0, 5);
+        // circle.y = -circle.radius;
+        // circle.vy = this.random(0, 5);
       }
       if (circle.x < -circle.radius) {
-        circle.x = this.width + circle.radius;
-        circle.vx = this.random(-5, -1);
+        // circle.x = this.width + circle.radius;
+        // circle.vx = this.random(-5, -1);
       }
       if (circle.y < -circle.radius) {
         circle.y = this.height + circle.radius;
-        circle.vy = this.random(-5, -1);
+        circle.vy = -this.random(1, 5, true);
+        circle.radius = this.random(5, 10);
       }
     });
   }
   createCircle () {
     const circle = {
       x: this.random(0, this.width),
-      y: this.random(0, this.height),
-      vx: this.random(-5, 5),
-      vy: this.random(-5, 5),
+      // y: this.random(0, this.height),
+      y: this.height,
+      // vx: Math.pow(-1, this.random(1, 2)) * this.random(1, 2),
+      // vy: Math.pow(-1, this.random(1, 2)) * this.random(1, 2),
+      vx: this.random(-1, 1, true),
+      vy: -this.random(1, 5, true),
       color: this.colors[this.random(0, this.colors.length - 1)],
       radius: this.random(5, 10),
     }
@@ -76,7 +83,7 @@ class Particle {
   drawCircleList () {
     this.circleList.forEach(circle => this.drawCircle(circle));
   }
-  drawCircle ({ x = 0, y = 0, radius = 10, color = this.colors[0], opacity = .2 }) {
+  drawCircle ({ x = 0, y = 0, radius = 10, color = this.colors[0], opacity = .1 }) {
     this.ctx.fillStyle = `rgba(${color.join(',')}, ${opacity})`;
     this.ctx.beginPath()
     this.ctx.arc(x, y, radius, 0, Math.PI * 2, true);
@@ -84,8 +91,9 @@ class Particle {
     this.ctx.fill();
   }
 
-  random (start = 0, end = 10) {
-    return ~~(Math.random() * (end - start) + start);
+  random (start = 0, end = 10, withDec = false) {
+    const random = Math.round(Math.random() * (end - start) + start);
+    return withDec ? random : ~~random;
   }
 }
 
