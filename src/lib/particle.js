@@ -3,6 +3,7 @@
  */
 class Particle {
   constructor (el, options) {
+
     this.el = typeof el === 'string' ? document.querySelector(el) : el;
     if (this.el.tagName !== 'CANVAS') {
       throw new TypeError('canvas element is required.');
@@ -43,8 +44,12 @@ class Particle {
       circle.x += circle.vx;
       circle.y += circle.vy;
       circle.radius += .05;
-      circle.opacity = ((this.height - circle.y) / this.height);
+      // circle.opacity = ((this.height - circle.y) / this.height);
+      circle.opacity = this.easeInCirc((this.height - circle.y), .1, 1.3, this.height + circle.radius);
 
+      // if ((this.height - circle.y) / (this.height / 3) === 0) {
+      //   circle.vx = this.random(-2, 2, true);
+      // }
       // circle.vx = this.random(-2, 2);
       if (circle.x > (this.width + circle.radius)) {
         circle.x = -circle.radius;
@@ -97,6 +102,10 @@ class Particle {
   random (start = 0, end = 10, withDec = false) {
     const random = Math.round(Math.random() * (end - start) + start);
     return withDec ? random : ~~random;
+  }
+
+  easeInCirc (t, b, c, d) {
+    return -c * (Math.sqrt(1 - (t/=d)*t) - 1) + b;
   }
 }
 
