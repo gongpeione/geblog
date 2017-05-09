@@ -4578,6 +4578,30 @@ h1, h2, h3, h4, h5, h6 {
 .content > h1 {
     text-align: center;
     margin-bottom: 0.8rem;
+    position: relative;
+}
+.content > h1::before {
+      content: '';
+      width: .2rem;
+      height: .2rem;
+      border-radius: 50%;
+      position: absolute;
+      background: #B2CDE7;
+      bottom: -.4rem;
+      left: 50%;
+      margin-left: -.1rem;
+      border: .07rem solid #fff;
+      z-index: 1;
+      box-sizing: border-box;
+}
+.content > h1::after {
+      content: '';
+      width: 20%;
+      border-bottom: 0.01rem solid #B2CDE7;
+      position: absolute;
+      bottom: -.3rem;
+      left: 50%;
+      transform: translateX(-50%);
 }
 .content pre {
     padding: 0.15rem;
@@ -4669,4 +4693,4 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
 }
 
-/*# sourceMappingURL=app.51d4bde4f53ccecebfb134ad1f4e9d8d.css.map*/
+/*# sourceMappingURL=app.fa1047289eedf52b359c05344279ec4f.css.map*/

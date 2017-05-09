@@ -90,12 +90,38 @@
   @import "../css/color.scss";
   @import "../css/base.scss";
 
-.content {
-  margin-bottom: $gap-huge;
-
-  > h1 {
-    text-align: center;
+  .content {
     margin-bottom: $gap-huge;
+
+    > h1 {
+      text-align: center;
+      margin-bottom: $gap-huge;
+      position: relative;
+
+      &::before {
+        content: '';
+        width: .2rem;
+        height: .2rem;
+        border-radius: 50%;
+        position: absolute;
+        background: $gray;
+        bottom: -.4rem;
+        left: 50%;
+        margin-left: -.1rem;
+        border: .07rem solid #fff;
+        z-index: 1;
+        box-sizing: border-box;
+      }
+
+      &::after {
+        content: '';
+        width: 20%;
+        border-bottom: .01rem solid $gray;
+        position: absolute;
+        bottom: -.3rem;
+        left: 50%;
+        transform: translateX(-50%);
+      }
   }
 
   pre {
@@ -148,6 +174,7 @@
       font-size: .3rem;
     }
   }
+
   .article article h2 {
     margin-left: -$gap-middle - .2rem;
   }
@@ -197,8 +224,9 @@
   ul li.task-list-item::before {
     content: '';
   }
-}
-.comment {
-  margin: 0 auto;
-}
+
+  }
+  .comment {
+    margin: 0 auto;
+  }
 </style>
