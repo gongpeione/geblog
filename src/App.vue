@@ -43,7 +43,8 @@
       const pa = new Paricle(this.$refs.canvas, {
         width: canvaRect.width,
         height: canvaRect.height,
-        opacity: .2
+        opacity: .2,
+        maxCircle: 50
       });
       console.log(pa);
     },

@@ -43,10 +43,11 @@ class Particle {
       circle.x += circle.vx;
       circle.y += circle.vy;
       circle.radius += .05;
+      circle.opacity = ((this.height - circle.y) / this.height);
 
       // circle.vx = this.random(-2, 2);
       if (circle.x > (this.width + circle.radius)) {
-        // circle.x = -circle.radius;
+        circle.x = -circle.radius;
         // circle.vx = this.random(0, 5);
       }
       if (circle.y > (this.height + circle.radius)) {
@@ -54,27 +55,29 @@ class Particle {
         // circle.vy = this.random(0, 5);
       }
       if (circle.x < -circle.radius) {
-        // circle.x = this.width + circle.radius;
+        circle.x = this.width + circle.radius;
         // circle.vx = this.random(-5, -1);
       }
       if (circle.y < -circle.radius) {
         circle.y = this.height + circle.radius;
         circle.vy = -this.random(1, 5, true);
         circle.radius = this.random(5, 10);
+        circle.opacity = .1;
       }
     });
   }
   createCircle () {
     const circle = {
       x: this.random(0, this.width),
-      // y: this.random(0, this.height),
-      y: this.height,
+      y: this.random(0, this.height),
+      // y: this.height,
       // vx: Math.pow(-1, this.random(1, 2)) * this.random(1, 2),
       // vy: Math.pow(-1, this.random(1, 2)) * this.random(1, 2),
-      vx: this.random(-1, 1, true),
-      vy: -this.random(1, 5, true),
+      vx: this.random(-2, 2, true),
+      vy: -this.random(1, 3, true),
       color: this.colors[this.random(0, this.colors.length - 1)],
       radius: this.random(5, 10),
+      opacity: .1
     }
 
     this.circleList.push(circle);
