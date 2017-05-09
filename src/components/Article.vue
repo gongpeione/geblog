@@ -1,5 +1,12 @@
 <template>
   <div class="cover">
+    <div class="catalog" v-if="hasCatalog" ref="catalog">
+      <label for="catalog">Catalog</label>
+      <input type="checkbox" id="catalog" ref="catalogTrigger">
+      <nav>
+        <a :href="item[1]" v-for="item in catalog" @click.prevent="anchor">{{ item[0] }}</a>
+      </nav>
+    </div>
     <div class="content">
       <h1>{{ title }}</h1>
       <div class="loading" v-if="loading">Loading...</div>
@@ -21,7 +28,9 @@
         msg: 'Welcome to Your Vue.js App',
         title: '',
         content: '',
-        loading: true
+        loading: true,
+        catalog: [],
+        hasCatalog: false
       }
     },
 
@@ -66,7 +75,24 @@
         }).then(data => {
           this.content = data;
           this.loading = false;
+
+          this.$nextTick(() => {
+            const heads = document.querySelectorAll('h2,h3');
+            this.catalogBuilder(heads);
+          });
         });
+      },
+      catalogBuilder (headList) {
+        Array.from(headList).forEach(head => {
+        	const link = head.querySelector('a').getAttribute('href');
+        	this.catalog.push([head.textContent, link]);
+        });
+        this.hasCatalog = true;
+//        window.addEventListener('click', (e) => {
+//        	if (e.target !== this.$refs['catalog']) {
+//        		this.$refs['catalogTrigger'].checked = false;
+//          }
+//        })
       },
       reset (url) {
         const self = this;
@@ -80,6 +106,12 @@
           }
         })
       },
+      anchor (e) {
+      	const id = e.target.getAttribute('href').split('#')[1];
+      	const target = document.querySelector('#user-content-' + id);
+        target.scrollIntoView();
+        this.$refs['catalogTrigger'].checked = false;
+      }
     }
   }
 </script>
@@ -90,6 +122,36 @@
   @import "../css/color.scss";
   @import "../css/base.scss";
 
+  .catalog {
+    label {
+      position: fixed;
+      z-index: 999;
+      left: .2rem;
+      top: .2rem;
+      font-family: 'Josefin Slab', serif;
+    }
+    nav {
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: #fff;
+      padding: .2rem;
+      min-width: 25%;
+      border-right: 1px solid #ccc;
+      transform: translateX(-100%);
+      transition: transform .2s ease-in-out;
+      padding-top: .6rem;
+    }
+    input {
+      display: none;
+    }
+    input:checked + nav {
+      transform: translateX(0);
+    }
+  }
   .content {
     margin-bottom: $gap-huge;
 
@@ -152,7 +214,12 @@
   }
 
   .article a.anchor {
-    display: none;
+    opacity: 0;
+    width: 0px;
+    display: inline-block;
+    svg {
+      height: .26rem;
+    }
   }
 
   .article a {
