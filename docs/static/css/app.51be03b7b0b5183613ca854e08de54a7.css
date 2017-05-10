@@ -96,7 +96,6 @@ h1, h2, h3, h4, h5, h6 {
 .wrap {
   -ms-flex: 1;
       flex: 1;
-  margin-bottom: 0.8rem;
 }
 .main-menu {
   text-align: center;
@@ -141,6 +140,7 @@ footer {
   padding: .4rem;
   text-align: center;
   position: relative;
+  transform: translateY(100%);
 }
 footer a {
     color: rgba(255, 255, 255, 0.6);
@@ -4763,4 +4763,4 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
 }
 
-/*# sourceMappingURL=app.21549bf1da2c749a64941c97690131f3.css.map*/
+/*# sourceMappingURL=app.51be03b7b0b5183613ca854e08de54a7.css.map*/

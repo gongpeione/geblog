@@ -108,7 +108,6 @@
 
   .wrap {
     flex: 1;
-    margin-bottom: $gap-huge;
   }
 
   .main-menu {
@@ -159,6 +158,7 @@
     padding: .4rem;
     text-align: center;
     position: relative;
+    transform: translateY(100%);
 
     a {
       color: rgba(255,255,255, .6)

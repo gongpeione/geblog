@@ -12,3 +12,17 @@ new Vue({
   template: '<App/>',
   components: { App }
 })
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js', {scope: '/' }).then(registration => {
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }, err => {
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  });
+}
+
+fetch('https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain&rnd=new')
+  .then(r => r.json(), e => console.log(e))
+  .then(d => console.log(d));
