@@ -12,7 +12,8 @@
     "node-sass": "^4.5.2",
     "sass-loader": "^6.0.3",
     "vue": "^2.1.10",
-    "vue-router": "^2.2.0"
+    "vue-router": "^2.2.0",
+    "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

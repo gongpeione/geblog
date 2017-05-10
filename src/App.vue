@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="loading"></div>
+    <div id="loading" ref="loading"></div>
     <div class="logo">
       <router-link to="/">
         <img src="./assets/logo.svg" alt="home">
@@ -9,9 +9,7 @@
     </div>
     <div class="main-menu">
       <nav>
-        <router-link v-for="item in menu" :to="item.link" exact>
-          {{ item.name }}
-        </router-link>
+        <router-link v-for="item in menu" :to="item.link" exact>{{ item.name }}</router-link>
       </nav>
     </div>
     <div class="wrap">
@@ -28,6 +26,7 @@
 <script>
   import config from './config';
   import Paricle from './lib/particle';
+  import loading from './lib/loading';
 
   export default {
     name: 'app',
@@ -40,6 +39,7 @@
 
     },
     mounted () {
+      loading.loadingEl = this.$refs.loading;
       const canvaRect = this.$refs.canvas.getBoundingClientRect();
       const pa = new Paricle(this.$refs.canvas, {
         width: canvaRect.width,
@@ -48,12 +48,7 @@
         maxCircle: 50
       });
     },
-    methods: {
-      totop () {
-        console.log('aaa');
-        window.scrollTo(0, 0);
-      }
-    }
+    methods: {}
   }
 </script>
 
@@ -69,6 +64,10 @@
     width: 100%;
     background: $blue;
     animation: 1s loading ease-in-out infinite;
+    display: none;
+    &.show {
+      display: block;
+    }
   }
   @keyframes loading {
     0% {

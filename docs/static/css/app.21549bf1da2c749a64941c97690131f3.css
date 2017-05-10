@@ -52,6 +52,10 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   background: #1C89F5;
   animation: 1s loading ease-in-out infinite;
+  display: none;
+}
+#loading.show {
+    display: block;
 }
 @keyframes loading {
 0% {
@@ -4759,4 +4763,4 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
 }
 
-/*# sourceMappingURL=app.43c7137e5b2274ff941911b3c8878613.css.map*/
+/*# sourceMappingURL=app.21549bf1da2c749a64941c97690131f3.css.map*/

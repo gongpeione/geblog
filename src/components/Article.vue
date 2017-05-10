@@ -19,7 +19,8 @@
 </template>
 
 <script>
-  import config from '../config.js'
+  import config from '../config.js';
+  import loading from '../lib/loading';
 
   export default {
     name: 'article',
@@ -70,6 +71,7 @@
           }
         };
 
+        loading.show();
         fetch(url, header).then(res => {
           return res.text()
         }).then(data => {
@@ -80,6 +82,8 @@
             const heads = document.querySelectorAll('h2,h3');
             this.catalogBuilder(heads);
           });
+
+          loading.hide();
         });
       },
       catalogBuilder (headList) {
