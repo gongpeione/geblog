@@ -140,7 +140,8 @@ footer {
   padding: .4rem;
   text-align: center;
   position: relative;
-  transform: translateY(100%);
+  margin-top: .8rem;
+  /*transform: translateY(100%);*/
 }
 footer a {
     color: rgba(255, 255, 255, 0.6);
@@ -4763,4 +4764,4 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
 }
 
-/*# sourceMappingURL=app.51be03b7b0b5183613ca854e08de54a7.css.map*/
+/*# sourceMappingURL=app.75b43ed136fb68b46a6ca28ae8624400.css.map*/

@@ -158,7 +158,8 @@
     padding: .4rem;
     text-align: center;
     position: relative;
-    transform: translateY(100%);
+    margin-top: .8rem;
+    /*transform: translateY(100%);*/
 
     a {
       color: rgba(255,255,255, .6)
