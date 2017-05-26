@@ -105,4 +105,44 @@ nginx               latest              3448f27c273f        2 weeks ago         
 
 需要注意的是，最后一项的 Size 并不是镜像实际占用硬盘空间大小。Docker 的镜像是可以继承、复用的，所以实际大小会比显示的 Size 小。
 
+#### Dangling Image
+
+Dangling Image 就是在执行 `docker images` 之后列表中 `REPOSITORY` 和 `TAG` 都为 `<none>` 的镜像，可以使用 `docker images -f dangling=true` 命令来列出所有的 Dangling Image。一般来说 Dangling Image 是已经没有用的镜像了，可以使用 ` docker rmi $(docker images -q -f dangling=true)` 来清除所有的 Dangling Image。
+
+### Commit
+
+1. `docker run --name webserver -d -p 80:80 nginx` 启动一个名为 webserver 的 nginx 容器
+2. `docker exec -it webserver bash` 以交互式的方式进入容器
+3. 一番修改之后…（例如修改 Nginx 默认主页）
+4. `docker diff webserver` 查看所做的修改
+5. `docker commit --author "xxx" --message "xxx" webserver nginx:modified` 将修改后的 webserver 容器保存为名为 nginx:modified 的镜像
+6. `docker images` 可以看到我们新生成的 nginx:modified 镜像了
+
+需要注意的是，`docker commit` 对镜像进行的是黑箱操作，这意味着新的镜像的生成方式，做了些什么，其他使用镜像的人是无从得知的，十分影响后期的维护工作。所以一般只在学习 docker 的时候使用 `docker commit`。
+
+### Dockerfile
+
+Dockerfile 就是描述 Docker 镜像构建过程的文件。下面用一个简单的并没有什么用的实例来解释 Dockerfile 中的各个指令的含义。
+
+```docker
+// /home/geeku/docker/Dockerfile
+FROM ubuntu:latest //指定基础镜像
+
+RUN mkdir docker // 执行命令
+RUN ["可执行文件", "参数1", "参数2"] // 也可以用这种格式执行命令
+
+COPY init.sh init.sh // 将 init.sh 文件复制到镜像中
+COPY [file1, file2, dist/] // COPY 也可以这样将多个文件复制到镜像中
+
+ADD root.tar.gz // ADD 是比 COPY 更高级的命令，参数可以是文件，下载链接和压缩文件
+
+CMD ["bash"] // 容器启动时执行的命令
+
+ENTRYPOINT [ "curl", "-s", "http://ip.cn" ]
+
+```
+
+```bash
+docker build -t nginx:v3 .
+```
 
