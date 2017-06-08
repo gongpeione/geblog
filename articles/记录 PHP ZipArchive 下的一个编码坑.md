@@ -279,5 +279,7 @@ $fileName = iconv('GBK', 'UTF-8//IGNORE', $fileName);
 // 源文件
 ```
 
-最后，PHP 7 大法好~ 以及真的要善用文档和 Google。
+最后，为什么 ZipArchive 会把 GBK 转成那样还不太清楚，如果有大佬知道求赐教。
+
+最后的最后，PHP 7 大法好~ 以及真的要善用文档和 Google。
 
