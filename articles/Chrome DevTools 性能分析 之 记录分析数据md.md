@@ -2,7 +2,7 @@
 
 >《Chrome DevTools 性能分析》系列主要是对 Chrome DevTools 中的性能（Performance）功能的使用进行详细的说明，文章的主要内容参考自 [Performance Analysis Reference](https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/reference#clear)。
 
-Chrome 的 DevTools 一直是一个前端程序猿调试分析前端代码的神兵利器。它从最早的几个简单的功能发展到现在，功能越来越多，越来越强大了。其中的性能（Performance）选项卡可能是平时用的不太多的（也可能是我还太弱了哈哈哈），但在有些时候却是十分重要救你于水火的一个功能。那么在这里就参考官网的介绍，来详细讲解下 DevTools 中性能模块的使用方法。
+Chrome 的 DevTools 一直是一个前端程序猿调试分析前端代码的神兵利器。它从最早的几个简单的功能发展到现在，功能越来越多，越来越强大了。其中的性能（Performance）选项卡可能是平时用的不太多的（也可能是我还太弱了哈哈哈），但在对页面进行调优却是十分重要的一个功能。那么在这里就参考官网的介绍，来详细讲解下 DevTools 中性能模块的使用方法。
 
 >![](http://www.stevesouders.com/blog/wp-content/uploads/2009/11/chrome-devtools-elements-883x599.png)
 > 早期的 DevTools，仅仅只有6个功能模块
