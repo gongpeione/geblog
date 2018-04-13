@@ -2,19 +2,14 @@ package main
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func routerInit() {
 
-	admin := router.Group("/admin")
-	admin.Use()
-	{
-		admin.GET("/login", func(c *gin.Context) {
-			c.String(200, "Login")
-		})
-	}
+	router.LoadHTMLGlob("./StaticTemplate/*")
 
 	api := router.Group("/api")
 	{
@@ -33,6 +28,12 @@ func routerInit() {
 
 	router.GET("/", func(c *gin.Context) {
 		c.String(200, "package main")
+	})
+
+	router.NoRoute(func(c *gin.Context) {
+		c.HTML(http.StatusOK, "404.html", gin.H{
+			"title": "Users",
+		})
 	})
 }
 
